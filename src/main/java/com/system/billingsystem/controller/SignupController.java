@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.system.billingsystem.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

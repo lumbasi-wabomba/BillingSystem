@@ -5,7 +5,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.controller.MainController"
+            fx:controller="com.system.billingsystem.controller.MainController"
             fx:id="root"
             stylesheets="@styles/main.css">
 

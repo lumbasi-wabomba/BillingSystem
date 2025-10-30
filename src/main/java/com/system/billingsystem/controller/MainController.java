@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.system.billingsystem.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
