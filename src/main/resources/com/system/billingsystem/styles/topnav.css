@@ -1,0 +1,29 @@
+.top-nav {
+    -fx-background-color: #ffffff; 
+    -fx-border-color: #e6e9ef;
+    -fx-border-width: 0 0 1 0; 
+    -fx-padding: 10;
+    -fx-spacing: 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-effect: dropshadow(gaussian, rgba(16,24,40,0.03), 4, 0.0, 0, 2);
+}
+
+.nav-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+
+.nav-button {
+    -fx-background-color: #0693d4;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-padding: 4 10;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #06b6d4, #0ea5e9);
+}

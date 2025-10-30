@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.controller.DashboardController"
+            prefWidth="1100.0" prefHeight="800.0"
+            stylesheets="@styles/dashboard.css"
+            fx:id="rootPane">
+
+  <children>
+    <VBox spacing="12.0" AnchorPane.topAnchor="8.0" AnchorPane.leftAnchor="8.0"
+          AnchorPane.rightAnchor="8.0" AnchorPane.bottomAnchor="8.0">
+
+     
+
+      <!-- Header Row -->
+      <HBox alignment="CENTER_LEFT" spacing="12.0">
+        <children>
+          <Label text="Dashboard" styleClass="dashboard-title"/>
+          <Region HBox.hgrow="ALWAYS"/>
+          <Button fx:id="refreshButton" text="Refresh"/>
+        </children>
+      </HBox>
+
+      <!-- Centered Stat Cards Row -->
+      <HBox spacing="12.0" alignment="CENTER">
+        <children>
+          <VBox spacing="6" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Today's Sales" styleClass="muted"/>
+            <Label fx:id="todaysSalesValue" styleClass="stat-value"/>
+            <Label fx:id="todaysSalesChange" text="+0% from yesterday" styleClass="stat-change"/>
+          </VBox>
+          <VBox spacing="6" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Items Sold" styleClass="muted"/>
+            <Label fx:id="itemsSoldValue" styleClass="stat-value"/>
+            <Label fx:id="itemsSoldChange" text="+0% from yesterday" styleClass="stat-change"/>
+          </VBox>
+          <VBox spacing="6" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Low Stock Items" styleClass="muted"/>
+            <Label fx:id="lowStockValue" styleClass="stat-value"/>
+            <Label fx:id="lowStockChange" text="0 items below minimum" styleClass="stat-change"/>
+          </VBox>
+          <VBox spacing="6" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Active Customers" styleClass="muted"/>
+            <Label fx:id="activeCustomersValue" styleClass="stat-value"/>
+            <Label fx:id="activeCustomersChange" text="+0% from last period" styleClass="stat-change"/>
+          </VBox>
+        </children>
+      </HBox>
+
+      <!-- Charts Row -->
+      <HBox spacing="12.0" HBox.hgrow="ALWAYS">
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+          <Label text="Sales Distribution (Pie)" styleClass="muted"/>
+          <PieChart fx:id="salesPie" prefHeight="300.0"/>
+        </VBox>
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+          <Label text="Sales Over Time (Line)" styleClass="muted"/>
+          <LineChart fx:id="salesLine" title="Last 7 Days" prefHeight="300.0">
+            <xAxis>
+              <CategoryAxis fx:id="lineXAxis" label="Day"/>
+            </xAxis>
+            <yAxis>
+              <NumberAxis fx:id="lineYAxis" label="KSH"/>
+            </yAxis>
+          </LineChart>
+        </VBox>
+      </HBox>
+
+      <!-- Lists Row -->
+      <HBox spacing="12.0" HBox.hgrow="ALWAYS">
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+          <Label text="Recent Transactions" styleClass="muted"/>
+          <ListView fx:id="recentTransactionsList" prefHeight="200"/>
+        </VBox>
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+          <Label text="Low Stock Alerts" styleClass="muted"/>
+          <ListView fx:id="lowStockList" prefHeight="200"/>
+        </VBox>
+      </HBox>
+
+    </VBox>
+  </children>
+
+</AnchorPane>

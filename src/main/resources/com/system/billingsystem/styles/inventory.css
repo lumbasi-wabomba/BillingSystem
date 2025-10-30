@@ -1,0 +1,50 @@
+/* --- Root --- */
+.root {
+    -fx-font-family: "Segoe UI", Roboto, Arial;
+    -fx-background-color: #f8fafc;
+}
+
+/* --- Cards --- */
+.card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 12;
+    -fx-border-color: #e6e9ef;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(16,24,40,0.06), 8, 0.0, 0, 2);
+    -fx-alignment: CENTER;
+}
+
+/* --- Stat Values --- */
+.stat-value {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+/* --- Top Nav ---
+.top-nav {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e6e9ef;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10;
+    -fx-spacing: 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-effect: dropshadow(gaussian, rgba(16,24,40,0.03), 4, 0.0, 0, 2);
+}
+.nav-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+.nav-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #0ea5e9, #06b6d4);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+.nav-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #06b6d4, #0ea5e9);
+} */

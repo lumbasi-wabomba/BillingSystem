@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.controller.MainController"
+            fx:id="root"
+            stylesheets="@styles/main.css">
+
+    <top>
+        <AnchorPane fx:id="topPlaceholder" prefHeight="50.0"/>
+    </top>
+
+    <center>
+        <VBox fx:id="contentArea" />
+    </center>
+</BorderPane>

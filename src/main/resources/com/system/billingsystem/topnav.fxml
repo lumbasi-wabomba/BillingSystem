@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.controller.TopNavController"
+      spacing="12"
+      styleClass="top-nav"
+      alignment="CENTER_LEFT"
+      HBox.hgrow="ALWAYS"
+      prefHeight="50"
+      stylesheets="@styles/topnav.css">
+
+    <!-- Branding -->
+    <Label text="Billing" styleClass="nav-title"/>
+
+    <!-- Spacer -->
+    <Region HBox.hgrow="ALWAYS"/>
+
+    <!-- Action buttons -->
+    <HBox spacing="6">
+        <Button fx:id="dashboardButton" text="Dashboard" styleClass="nav-button"/>
+        <Button fx:id="newSaleButton" text="New Sale" styleClass="nav-button"/>
+        <Button fx:id="manageInventoryButton" text="Manage Inventory" styleClass="nav-button"/>
+        <Button fx:id="paymentsButton" text="Payments" styleClass="nav-button"/>
+        <Button fx:id="salesButton" text="Sales" styleClass="nav-button"/>
+        <Button fx:id="purchasesButton" text="Purchases" styleClass="nav-button"/>
+    </HBox>
+
+</HBox>

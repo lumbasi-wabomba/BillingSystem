@@ -1,0 +1,94 @@
+/* --- Dashboard Styles --- */
+.root, .anchor-pane {
+    -fx-background-color: #f8fafc; /* page background */
+    -fx-font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -fx-padding: 0;
+}
+
+/* --- Card --- */
+.card {
+    -fx-background-color: #ffffff; /* card background */
+    -fx-padding: 12;
+    -fx-border-color: #e6e9ef;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(16,24,40,0.06), 8, 0.0, 0, 2);
+    -fx-spacing: 8;
+    -fx-alignment: center;
+}
+
+/* --- Labels --- */
+.label {
+    -fx-font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+.dashboard-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+.muted {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 11px;
+}
+
+/* --- Stat Cards --- */
+.stat-value {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+.stat-change {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}
+
+/* --- List Views --- */
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.list-cell {
+    -fx-padding: 8 6;
+    -fx-font-size: 13px;
+}
+.list-cell:filled:selected, .list-cell:selected {
+    -fx-background-color: rgba(6,182,212,0.08);
+}
+
+/* --- Charts --- */
+.pie-chart, .line-chart {
+    -fx-background-color: transparent;
+}
+.chart-legend, .chart-plot-background {
+    -fx-background-color: transparent;
+}
+.chart-series-line {
+    -fx-stroke-width: 2.5px;
+}
+.chart-line-symbol {
+    -fx-background-color: white, #06b6d4; /* accent */
+    -fx-background-radius: 6px;
+    -fx-border-color: #06b6d4;
+}
+.axis-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}
+
+/* --- Buttons --- */
+.button {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 6 12;
+    -fx-font-weight: 600;
+}
+.button.outline {
+    -fx-background-color: transparent;
+    -fx-border-color: #e6e9ef;
+    -fx-text-fill: #0f172a;
+}
+
+/* --- Helpers --- */
+.h-pad-6 { -fx-padding: 0 6 0 6; }
+.v-gap-8 { -fx-spacing: 8px; }
