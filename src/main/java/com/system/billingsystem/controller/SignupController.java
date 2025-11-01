@@ -80,7 +80,7 @@ public class SignupController implements Initializable {
         System.out.println("Signup OK for: " + email + " (" + fullName + ")");
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/login.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) signupButton.getScene().getWindow();
@@ -95,7 +95,7 @@ public class SignupController implements Initializable {
 
     private void goToLogin() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/login.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) goToLoginButton.getScene().getWindow();

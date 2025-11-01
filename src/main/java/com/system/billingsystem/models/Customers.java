@@ -1,5 +1,42 @@
 package com.system.billingsystem.models;
 
+import java.util.Date;
+/*
+* this class represents a customer in the billing system
+* it contains customer details such as id, name, email, phone number and date of creation
+* */
 public class Customers {
+    private String customerId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private Date date;
+    
+    public Customers(String customerId, String firstName, String lastName, String email, String phoneNumber, Date date){
+        this.customerId = customerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.date = date;
+    };
 
+    public Customers() {}
+
+    public String getCustomerId() {
+        return customerId;
+    };
+    public String getName() {
+        return firstName + " " + lastName;
+    };
+    public String getEmail() {
+        return email;
+    };
+    public String getPhoneNumber() {
+        return phoneNumber;
+    };
+    public Date getDate() {
+        return date;
+    };
 }
