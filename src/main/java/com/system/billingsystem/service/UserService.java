@@ -4,6 +4,8 @@ import com.system.billingsystem.dao.UserDao;
 import com.system.billingsystem.models.User;
 
 import javax.swing.*;
+import java.sql.SQLException;
+import java.util.List;
 
 /*
 a service class for user related operations
@@ -11,44 +13,53 @@ connects to the UserDao for database interactions
  */
 
 public class UserService {
-    private  final UserDao userDao;
+    private final UserDao userDao;
 
     public UserService(UserDao userDao) {
         this.userDao = userDao;
     }
 
-    //for logging in user
-    public boolean authenticateUser(String username, String password) {
-            String userEmail =  userDao.getUserByEmail(username);
-            String user =  userDao.getUserByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return true;
-        } else (userEmail!= null && userEmail.getPassword().equals(password)) {
-            return true;
-        }
-        return false;
-    }
-
-
-    //for registering new user
-    public boolean registerUser(User user){
-        try{
-            if(userDao.getUserByUsername(user.toString()) != null){
-                System.out.println("Username already taken.");
-                return false;
-            }else {
-                userDao.addUser(user);
-                System.out.println("User added!");
-                return true;
-            }
+    public User getUser(User user) throws SQLException {
+        try {
+            return userDao.get(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new SQLException("Error:" + e.getMessage(), e);
         }
-        return false;
+    }
+
+    public List<User> getAllUsers() throws SQLException {
+        try {
+            return userDao.getAll();
+        } catch (Exception e) {
+            throw new SQLException("Error: " + e.getMessage(), e);
+        }
+
+    }
+
+    public User saveUser(User user) throws SQLException {
+        try {
+            return userDao.save(user);
+        } catch (Exception e) {
+            throw new SQLException("Error: " + e.getMessage(), e);
+        }
+    }
+
+    public User updateUser(User user, String[] details) throws SQLException {
+        try {
+            return userDao.update(user, details);
+        } catch (Exception e) {
+            throw new SQLException("Error: " + e.getMessage(), e);
+        }
+    }
+
+    public User deleteUser(String id) throws SQLException {
+        try {
+            return userDao.delete(id);
+        } catch (Exception e) {
+            throw new SQLException("Error: " + e.getMessage(), e);
+        }
     }
 
 
-
-
-
+    //for logging in user
 }
