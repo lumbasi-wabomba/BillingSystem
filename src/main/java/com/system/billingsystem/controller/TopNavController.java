@@ -25,7 +25,7 @@ public class TopNavController {
         if (dashboardButton != null) {
             dashboardButton.setOnAction(e -> {
                 if (mainController != null) {
-                    mainController.loadPage("/dashboard.fxml");
+                    mainController.loadPage("/com/system/billingsystem/dashboard.fxml");
                 }
             });
         }
@@ -35,7 +35,7 @@ public class TopNavController {
         if (manageInventoryButton != null) {
             manageInventoryButton.setOnAction(e -> {
                 if (mainController != null) {
-                    mainController.loadPage("/inventory.fxml"); 
+                    mainController.loadPage("/com/system/billingsystem/inventory.fxml");
                 }
             });
         }

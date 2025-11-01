@@ -87,7 +87,7 @@ public class LoginController implements Initializable {
             System.out.println("Login OK");
 
             try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/main.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -108,7 +108,7 @@ public class LoginController implements Initializable {
 
     private void handleGoToSignup() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/signup.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) goToSignupButton.getScene().getWindow();

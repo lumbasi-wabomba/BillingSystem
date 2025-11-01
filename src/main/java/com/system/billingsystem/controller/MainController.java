@@ -19,12 +19,12 @@ public class MainController {
     @FXML
     public void initialize() {
         loadTopNav();        
-        loadPage("/dashboard.fxml");
+        loadPage("/com/system/billingsystem/dashboard.fxml");
     }
 
     private void loadTopNav() {
         try {
-            URL url = getClass().getResource("/topnav.fxml");
+            URL url = getClass().getResource("/com/system/billingsystem/topnav.fxml");
             if (url == null) {
                 System.err.println("topnav.fxml not found!");
                 return;
