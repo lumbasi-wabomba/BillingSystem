@@ -27,7 +27,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public Customers get(Customers customers) throws SQLException {
-        String sqlGet = "";
+        String sqlGet = "SELECT * FROM customer WHERE customer_email=?";
             try(Connection myConnection = DatabaseConnection.getConnection()){
                 PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
                 statementGet.setString(1, customers.getCustomerId());
@@ -43,7 +43,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public List<Customers> getAll() throws SQLException {
-        String sqlGetAll = "";
+        String sqlGetAll = "SELECT * FROM customer";
         List<Customers> customers = new ArrayList<>();
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
@@ -59,7 +59,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public Customers save(Customers customers) throws SQLException {
-        String sqlSave = "";
+        String sqlSave = "INSERT INTO customers (customerID,firstName,lastName,email,phoneNumber,date) VALUES (?,?,?,?,?,?) ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, customers.getCustomerId());
@@ -75,7 +75,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public Customers update(Customers customers, String[] params) throws SQLException {
-        String sqlUpdate = "";
+        String sqlUpdate = "UPDATE customers SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, date = ? WHERE customer_id = ? ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -92,7 +92,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public Customers delete(String id) throws SQLException {
-        String  sqlDelete = "";
+        String  sqlDelete = "DELETE FROM customers WHERE customer_id = ?";
         try(Connection myConnection  = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
