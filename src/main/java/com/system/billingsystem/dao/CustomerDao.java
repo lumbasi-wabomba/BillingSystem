@@ -9,6 +9,22 @@ import java.util.List;
 
 public class CustomerDao implements Dao<Customers> {
 
+    public String getCutomerIdByEmail(String email) throws SQLException {
+        String sqlGetCustomerId = "";
+        try (Connection myConnection = DatabaseConnection.getConnection()) {
+            PreparedStatement statementGetCustomerId = myConnection.prepareStatement(sqlGetCustomerId);
+            statementGetCustomerId.setString(1, email);
+            ResultSet resultSet = statementGetCustomerId.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("customer_id");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching customer ID by email: " + email, e);
+        }
+    }
+
     @Override
     public Customers get(Customers customers) throws SQLException {
         String sqlGet = "";

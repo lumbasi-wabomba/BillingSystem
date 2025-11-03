@@ -12,6 +12,38 @@ import java.sql.Date;
 
 public class UserDao  implements Dao<User> {
 
+    public String getUserIdByEmail(String email) throws SQLException {
+        String sqlGetCustomerId = "";
+        try (Connection myConnection = DatabaseConnection.getConnection()) {
+            PreparedStatement statementGetUserId = myConnection.prepareStatement(sqlGetCustomerId);
+            statementGetUserId.setString(1, email);
+            ResultSet resultSet = statementGetUserId.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("customer_id");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching customer ID by email: " + email, e);
+        }
+    }
+
+    public String getUserPassword(String email) throws SQLException {
+        String sqlGetUserPassword = "";
+        try (Connection myConnection = DatabaseConnection.getConnection()) {
+            PreparedStatement statementGetUserPassword = myConnection.prepareStatement(sqlGetUserPassword);
+            statementGetUserPassword.setString(1, email);
+            ResultSet resultSet = statementGetUserPassword.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("password");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching user password by email: " + email, e);
+        }
+    }
+
     @Override
     public User get(User user) throws SQLException {
         String sqlGet = "";
