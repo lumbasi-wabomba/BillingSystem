@@ -76,7 +76,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public Customers delete(String id) throws SQLException {
-        String  sqlDelete = "DELETE FROM customers WHERE customer_id = ?";
+        String  sqlDelete = "DELETE * FROM customers WHERE customer_id = ?";
         try(Connection myConnection  = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
