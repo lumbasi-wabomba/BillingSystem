@@ -89,7 +89,7 @@ public class SalesDao  implements  Dao<Sales> {
             statementUpdate.setString(6, params[5]);
             statementUpdate.setString(7, params[6]);
 
-            statementUpdate.executeUpdate(sqlUpdate);
+            statementUpdate.executeUpdate();
             return sales;
         } catch (SQLException e) {
             throw new SQLException("Error updating sales", e);

@@ -102,7 +102,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
             statementUpdate.setDouble(7, Double.parseDouble(params[6]));
             statementUpdate.setDouble(8, Double.parseDouble(params[7]));
             statementUpdate.setDate(9, Date.valueOf(params[8]));
-            statementUpdate.executeUpdate(sqlUpdate);
+            statementUpdate.executeUpdate();
             return salesItems;
         } catch (SQLException e) {
             throw new SQLException("Error updating sales item: " + salesItems.getItemId(), e);

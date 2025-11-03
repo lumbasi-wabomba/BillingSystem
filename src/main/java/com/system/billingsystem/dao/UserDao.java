@@ -37,7 +37,7 @@ public class UserDao  implements Dao<User> {
             statementGetUserPassword.setString(1, email);
             ResultSet resultSet = statementGetUserPassword.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("password");
+                return resultSet.getString("user_password");
             } else {
                 return null;
             }
@@ -121,7 +121,8 @@ public class UserDao  implements Dao<User> {
             statementSave.setDate(7, (Date) user.getDate());
             statementSave.setString(8, user.getPassword());
 
-            return (User) statementSave.executeQuery();
+            statementSave.executeUpdate();
+            return user;
         } catch (SQLException e) {
             throw new SQLException("Error saving user: " + user.getUserID(), e);
         }
@@ -138,10 +139,11 @@ public class UserDao  implements Dao<User> {
             statementUpdate.setString(3, params[2]);
             statementUpdate.setString(4, params[3]);
             statementUpdate.setString(5, params[4]);
-            statementUpdate.setDate(5, Date.valueOf(params[5]));
-            statementUpdate.setString(6, params[6]);
+            statementUpdate.setDate(6, Date.valueOf(params[5]));
+            statementUpdate.setString(7, params[6]);
+            statementUpdate.setString(8, user.getEmail());
 
-            statementUpdate.executeUpdate(sqlUpdate);
+            statementUpdate.executeUpdate();
         }catch (Exception e) {
             throw new SQLException("Error while updating", e);
         }
@@ -151,11 +153,11 @@ public class UserDao  implements Dao<User> {
     //deletes the user details from the DB
     @Override
     public User delete(String id) throws SQLException {
-        String  sqlDelete = "DELETE FROM user WHERE user_id = ?";
+        String  sqlDelete = "DELETE FROM user WHERE user_userid = ?";
         try(Connection myConnection  = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
-            statementDelete.executeQuery();
+            statementDelete.executeUpdate();
         } catch (Exception e) {
              throw  new SQLException("error while deleting the user", e);
         }

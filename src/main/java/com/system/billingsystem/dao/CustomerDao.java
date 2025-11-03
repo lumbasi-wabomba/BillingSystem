@@ -89,7 +89,8 @@ public class CustomerDao implements Dao<Customers> {
             statementSave.setString(3, customers.getEmail());
             statementSave.setString(4, customers.getPhoneNumber());
             statementSave.setDate(5, (Date) customers.getDate());
-            return (Customers) statementSave.executeQuery();
+            statementSave.executeUpdate();
+            return customers;
         } catch (SQLException e) {
             throw new SQLException("Error saving user: " + customers.getCustomerId(), e);
         }
@@ -106,7 +107,7 @@ public class CustomerDao implements Dao<Customers> {
             statementUpdate.setString(3, params[2]);
             statementUpdate.setString(4, params[3]);
             statementUpdate.setDate(5, Date.valueOf(params[4]));
-            statementUpdate.executeUpdate(sqlUpdate);
+            statementUpdate.executeUpdate();
         }catch (Exception e) {
             throw new SQLException("Error while updating", e);
         }
@@ -116,11 +117,11 @@ public class CustomerDao implements Dao<Customers> {
     //delete customer from the DB
     @Override
     public Customers delete(String id) throws SQLException {
-        String  sqlDelete = "DELETE FROM customers WHERE customer_id = ?";
+        String  sqlDelete = "DELETE FROM customers WHERE customers_customerid = ?";
         try(Connection myConnection  = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
-            statementDelete.executeQuery();
+            statementDelete.executeUpdate();
         } catch (Exception e) {
             throw  new SQLException("error while deleting the user", e);
         }
