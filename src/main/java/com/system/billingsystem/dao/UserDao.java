@@ -46,7 +46,7 @@ public class UserDao  implements Dao<User> {
 
     @Override
     public User get(User user) throws SQLException {
-        String sqlGet = "";
+        String sqlGet = "SELECT * FROM user WHERE userID = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet= myConnection.prepareStatement(sqlGet);
             statementGet.setString(1, user.getUserID());
@@ -64,7 +64,7 @@ public class UserDao  implements Dao<User> {
     //error on fetching all users
     @Override
     public List<User> getAll() throws SQLException {
-        String sqlGetAll = "";
+        String sqlGetAll = "SELECT * FROM user";
         List<User> users = new ArrayList<>();
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
@@ -81,7 +81,7 @@ public class UserDao  implements Dao<User> {
 
     @Override
     public User save(User user) throws SQLException {
-        String sqlSave = "";
+        String sqlSave = "INSERT INTO user (userID,username,firstName,lastName,email,role,date,password) VALUES (?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()){
            PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, user.getUserID());
@@ -99,7 +99,7 @@ public class UserDao  implements Dao<User> {
 
     @Override
     public User update(User user, String[] params) throws SQLException {
-        String sqlUpdate = "";
+        String sqlUpdate = "UPDATE user SET username = ?,firstName = ?, lastName = ?, email = ?, role = ?, date = ?, password = ? WHERE userID = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -119,7 +119,7 @@ public class UserDao  implements Dao<User> {
 
     @Override
     public User delete(String id) throws SQLException {
-        String  sqlDelete = "";
+        String  sqlDelete = "DELETE FROM user WHERE userID = ?";
         try(Connection myConnection  = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
