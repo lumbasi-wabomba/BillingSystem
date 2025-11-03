@@ -12,9 +12,45 @@ import java.sql.Date;
 
 public class UserDao  implements Dao<User> {
 
+    public String getUserIdByEmail(String email) throws SQLException {
+        String sqlGetUserId = "SELECT user_email, user_username FROM user WHERE user_email = ?";
+        try (Connection myConnection = DatabaseConnection.getConnection()) {
+            PreparedStatement statementGetUserId = myConnection.prepareStatement(sqlGetUserId);
+            statementGetUserId.setString(1, email);
+            ResultSet resultSet = statementGetUserId.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("customer_id");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching customer ID by email: " + email, e);
+        }
+    }
+
+    public String getUserPassword(String email) throws SQLException {
+        String sqlGetUserPassword = "SELECT user_email, user_password FROM user WHERE user_email = ?";
+        try (Connection myConnection = DatabaseConnection.getConnection()) {
+            PreparedStatement statementGetUserPassword = myConnection.prepareStatement(sqlGetUserPassword);
+            statementGetUserPassword.setString(1, email);
+            ResultSet resultSet = statementGetUserPassword.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("password");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching user password by email: " + email, e);
+        }
+    }
+
     @Override
     public User get(User user) throws SQLException {
+<<<<<<< Updated upstream
         String sqlGet = "SELECT * FROM user WHERE userID = ?";
+=======
+        String sqlGet = "SELECT * FROM  user WHERE user_email = ?";
+>>>>>>> Stashed changes
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet= myConnection.prepareStatement(sqlGet);
             statementGet.setString(1, user.getUserID());
