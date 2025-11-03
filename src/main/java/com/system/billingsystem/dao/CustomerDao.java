@@ -43,7 +43,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public Customers save(Customers customers) throws SQLException {
-        String sqlSave = "INSERT * INTO customers (customerID,firstName,lastName,email,phoneNumber,date) VALUES (?,?,?,?,?,?) ";
+        String sqlSave = "INSERT INTO customers (customerID,firstName,lastName,email,phoneNumber,date) VALUES (?,?,?,?,?,?) ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, customers.getCustomerId());
@@ -76,7 +76,7 @@ public class CustomerDao implements Dao<Customers> {
 
     @Override
     public Customers delete(String id) throws SQLException {
-        String  sqlDelete = "DELETE * FROM customers WHERE customer_id = ?";
+        String  sqlDelete = "DELETE FROM customers WHERE customer_id = ?";
         try(Connection myConnection  = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
