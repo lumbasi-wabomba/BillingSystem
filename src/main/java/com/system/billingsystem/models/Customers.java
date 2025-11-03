@@ -6,13 +6,15 @@ import java.util.Date;
 * it contains customer details such as id, name, email, phone number and date of creation
 * */
 public class Customers {
+    // Customer details
     private String customerId;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
     private Date date;
-    
+
+    // Constructor
     public Customers(String customerId, String firstName, String lastName, String email, String phoneNumber, Date date){
         this.customerId = customerId;
         this.firstName = firstName;
@@ -21,9 +23,9 @@ public class Customers {
         this.phoneNumber = phoneNumber;
         this.date = date;
     };
-
     public Customers() {}
 
+    // Getters
     public String getCustomerId() {
         return customerId;
     };

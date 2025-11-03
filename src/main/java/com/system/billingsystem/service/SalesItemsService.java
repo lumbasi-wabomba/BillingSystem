@@ -13,6 +13,7 @@ public class SalesItemsService {
         this.salesItemsDao = salesItemsDao;
     }
 
+    // Service methods for sales item operations
     public SalesItems getSoldItem(SalesItems soldItem) throws SQLException{
         try{
             return salesItemsDao.get(soldItem);

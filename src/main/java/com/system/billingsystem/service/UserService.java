@@ -19,6 +19,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
+    // Service methods for user operations
     public User getUser(User user) throws SQLException {
         try {
             return userDao.get(user);

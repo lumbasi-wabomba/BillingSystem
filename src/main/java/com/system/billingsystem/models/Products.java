@@ -22,11 +22,11 @@ public class Products {
         this.category = category;
         this.reorderLevel = reorderLevel;
     };
-
     public Products() {
 
     }
 
+    // Getters
     public String getProductId() {
         return productId;
     };

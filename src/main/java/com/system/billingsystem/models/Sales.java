@@ -15,6 +15,7 @@ public class Sales {
     private  String status;
     private  String paymentMethod;
 
+    // Constructor
     public Sales(String saleId, String customerId, Date saleDate, String salesPersonId, double totalAmount, String status, String paymentMethod) {
         this.saleId = saleId;
         this.customerId = customerId;
@@ -24,11 +25,11 @@ public class Sales {
         this.status = status;
         this.paymentMethod = paymentMethod;
     };
-
     public Sales() {
 
     }
 
+    // Getters
     public String getSaleId() {
         return saleId;
     };
