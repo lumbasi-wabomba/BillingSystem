@@ -63,4 +63,17 @@ public class UserService {
 
 
     //for logging in user
+    public boolean loginUser(String email, String password) throws SQLException{
+        try{
+            if (userDao.getUserByEmail(email) != null){
+                if(userDao.getUserPassword(email).equals(password)){
+                    return  true;
+                }
+            }
+            return false;
+
+        } catch (Exception e) {
+            throw new SQLException("Error: "+ e.getMessage(), e);
+        }
+    }
 }

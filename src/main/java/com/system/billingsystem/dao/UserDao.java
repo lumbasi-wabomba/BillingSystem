@@ -13,7 +13,7 @@ import java.sql.Date;
 public class UserDao  implements Dao<User> {
 
     //fetches user email and user username from the DB which is to  be used in login
-    public String getUserIdByEmail(String email) throws SQLException {
+    public String getUserByEmail(String email) throws SQLException {
         String sqlGetUserId = "SELECT user_email, user_username FROM user WHERE user_email = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGetUserId = myConnection.prepareStatement(sqlGetUserId);
