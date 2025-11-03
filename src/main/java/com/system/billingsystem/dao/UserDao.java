@@ -12,14 +12,15 @@ import java.sql.Date;
 
 public class UserDao  implements Dao<User> {
 
-    public String getUserIdByEmail(String email) throws SQLException {
+    //fetches user email and user username from the DB which is to  be used in login
+    public String getUserByEmail(String email) throws SQLException {
         String sqlGetUserId = "SELECT user_email, user_username FROM user WHERE user_email = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGetUserId = myConnection.prepareStatement(sqlGetUserId);
             statementGetUserId.setString(1, email);
             ResultSet resultSet = statementGetUserId.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("customer_id");
+                return resultSet.getString("user_email");
             } else {
                 return null;
             }
@@ -28,6 +29,7 @@ public class UserDao  implements Dao<User> {
         }
     }
 
+    //to fetch user password from the DB to be used for login
     public String getUserPassword(String email) throws SQLException {
         String sqlGetUserPassword = "SELECT user_email, user_password FROM user WHERE user_email = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
@@ -35,7 +37,7 @@ public class UserDao  implements Dao<User> {
             statementGetUserPassword.setString(1, email);
             ResultSet resultSet = statementGetUserPassword.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("password");
+                return resultSet.getString("user_password");
             } else {
                 return null;
             }
@@ -44,28 +46,35 @@ public class UserDao  implements Dao<User> {
         }
     }
 
+    //to get all the customer detail after passing the email to the DB, DB returns all the details
     @Override
     public User get(User user) throws SQLException {
-<<<<<<< Updated upstream
-        String sqlGet = "SELECT * FROM user WHERE userID = ?";
-=======
         String sqlGet = "SELECT * FROM  user WHERE user_email = ?";
->>>>>>> Stashed changes
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet= myConnection.prepareStatement(sqlGet);
-            statementGet.setString(1, user.getUserID());
-            statementGet.setString(2, user.getName());
-            statementGet.setString(3, user.getRole());
-            statementGet.setString(4, user.getPassword());
-            statementGet.setString(5, user.getUsername());
-            statementGet.setString(6, user.getEmail());
-            statementGet.setDate(7, (Date) user.getDate());
-            return (User) statementGet.executeQuery();
+
+            statementGet.setString(1, user.getEmail());
+            ResultSet userDetails = statementGet.executeQuery();
+
+            while (userDetails.next()) {
+                User foundDetails = new User(
+                        userDetails.getString("user_id"),
+                        userDetails.getString("user_username"),
+                        userDetails.getString("user_firstname"),
+                        userDetails.getString("user_lastname"),
+                        userDetails.getString("user_email"),
+                        userDetails.getString("user_role"),
+                        userDetails.getDate("user_date"),
+                        userDetails.getString("user_password")
+                );
+                return foundDetails;
+            }
+            return null;
         } catch (SQLException e) {
             throw new SQLException("Error fetching user" + 1+ 2, e);
         }
     }
-    //error on fetching all users
+    //fetches all registered users in the DB
     @Override
     public List<User> getAll() throws SQLException {
         String sqlGetAll = "SELECT * FROM user";
@@ -74,7 +83,16 @@ public class UserDao  implements Dao<User> {
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
             ResultSet allUsers = statementGetAll.executeQuery();
             while (allUsers.next()) {
-                users.add(new User());
+                users.add(new User(
+                        allUsers.getString("user_userid"),
+                        allUsers.getString("user_username"),
+                        allUsers.getString("user_firstname"),
+                        allUsers.getString("user_lastname"),
+                        allUsers.getString("user_email"),
+                        allUsers.getString("user_role"),
+                        allUsers.getDate("user_date"),
+                        allUsers.getString("user_password")
+                ));
             } ;
             return users;
 
@@ -83,27 +101,37 @@ public class UserDao  implements Dao<User> {
         }
     }
 
+    //used to post user details to the DB
     @Override
     public User save(User user) throws SQLException {
-        String sqlSave = "INSERT INTO user (userID,username,firstName,lastName,email,role,date,password) VALUES (?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO user (user_userid,user_username,user_firstname,user_lastname,user_email,user_role,user_date,user_password) VALUES (?,?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()){
            PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
+
+           String[] name = user.getName().split(" ", 2);
+           String firstName = name[0];
+           String lastName = name[1];
+
             statementSave.setString(1, user.getUserID());
-            statementSave.setString(2, user.getName());
-            statementSave.setString(3, user.getEmail());
-            statementSave.setString(4, user.getRole());
-            statementSave.setDate(5, (Date) user.getDate());
-            statementSave.setString(6, user.getPassword());
-            statementSave.setString(7, user.getUsername());
-            return (User) statementSave.executeQuery();
+            statementSave.setString(2, user.getUsername());
+            statementSave.setString(3, firstName);
+            statementSave.setString(4, lastName);
+            statementSave.setString(5, user.getEmail());
+            statementSave.setString(6, user.getRole());
+            statementSave.setDate(7, (Date) user.getDate());
+            statementSave.setString(8, user.getPassword());
+
+            statementSave.executeUpdate();
+            return user;
         } catch (SQLException e) {
             throw new SQLException("Error saving user: " + user.getUserID(), e);
         }
     }
 
+    //updates the user details on the DB
     @Override
     public User update(User user, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE user SET username = ?,firstName = ?, lastName = ?, email = ?, role = ?, date = ?, password = ? WHERE userID = ?";
+        String sqlUpdate = "UPDATE user SET user_username = ?,User_firstname = ?, user_lastname = ?, user_email = ?, user_role = ?, user_date = ?, user_password = ? WHERE user_email = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -111,23 +139,25 @@ public class UserDao  implements Dao<User> {
             statementUpdate.setString(3, params[2]);
             statementUpdate.setString(4, params[3]);
             statementUpdate.setString(5, params[4]);
-            statementUpdate.setDate(5, Date.valueOf(params[5]));
-            statementUpdate.setString(6, params[6]);
+            statementUpdate.setDate(6, Date.valueOf(params[5]));
+            statementUpdate.setString(7, params[6]);
+            statementUpdate.setString(8, user.getEmail());
 
-            statementUpdate.executeUpdate(sqlUpdate);
+            statementUpdate.executeUpdate();
         }catch (Exception e) {
             throw new SQLException("Error while updating", e);
         }
         return null;
     }
 
+    //deletes the user details from the DB
     @Override
     public User delete(String id) throws SQLException {
-        String  sqlDelete = "DELETE FROM user WHERE userID = ?";
+        String  sqlDelete = "DELETE FROM user WHERE user_userid = ?";
         try(Connection myConnection  = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
-            statementDelete.executeQuery();
+            statementDelete.executeUpdate();
         } catch (Exception e) {
              throw  new SQLException("error while deleting the user", e);
         }

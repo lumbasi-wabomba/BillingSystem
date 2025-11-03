@@ -16,6 +16,7 @@ public class User {
     private String password;
     public int id =0;
 
+    // Constructor
     public User(){};
     public User(String userID, String username, String firstName, String lastName, String email, String role, Date date, String password){
         this.userID = userID;

@@ -13,6 +13,7 @@ public class ProductsService {
         this.productsDao = new ProductsDao();
     }
 
+    // Service methods for product operations
     public Products getProduct(Products product) throws SQLException {
         try{
             return productsDao.get(product);

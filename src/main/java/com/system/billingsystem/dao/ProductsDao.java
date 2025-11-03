@@ -10,25 +10,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsDao  implements  Dao<Products> {
+
+    // Get a product by its product code
     @Override
     public Products get(Products products) throws SQLException {
-        String sqlGet = "SELECT * FROM products WHERE productId = ?";
+        String sqlGet = "SELECT * FROM products WHERE products_productcode = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
-            statementGet.setString(1, products.getProductId());
-            statementGet.setString(2, products.getProductName());
-            statementGet.setString(3, products.getProductCode());
-            statementGet.setDouble(4, products.getPrice());
-            statementGet.setInt(5, products.getQuantity());
-            statementGet.setString(6, products.getCategory());
-            statementGet.setInt(7, products.getReorderLevel());
-            return (Products) statementGet.executeQuery();
+
+            statementGet.setString(1, products.getProductCode());
+            ResultSet productDetails = statementGet.executeQuery();
+            while (productDetails.next()) {
+                Products foundDetails = new Products(
+                        productDetails.getString("products_productid"),
+                        productDetails.getString("products_productname"),
+                        productDetails.getString("products_productcode"),
+                        productDetails.getDouble("products_price"),
+                        productDetails.getInt("products_quantity"),
+                        productDetails.getString("products_category"),
+                        productDetails.getInt("products_reorderLevel")
+                );
+                return foundDetails;
+            }
+            return null;
         } catch (SQLException e) {
             throw new SQLException("Error fetching product" + 1+ 2, e);
 
         }
     }
 
+    // Get all products from the database
     @Override
     public List<Products> getAll() throws SQLException {
         String sqlGetAll = "SELECT * FROM products";
@@ -37,7 +48,15 @@ public class ProductsDao  implements  Dao<Products> {
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
             ResultSet allProducts = statementGetAll.executeQuery();
             while (allProducts.next()) {
-                products.add(new Products());
+                products.add(new Products(
+                        allProducts.getString("products_productid"),
+                        allProducts.getString("products_productname"),
+                        allProducts.getString("products_productcode"),
+                        allProducts.getDouble("products_price"),
+                        allProducts.getInt("products_quantity"),
+                        allProducts.getString("products_category"),
+                        allProducts.getInt("products_reorderLevel")
+                ));
             };
             return products;
         } catch (SQLException e) {
@@ -45,9 +64,10 @@ public class ProductsDao  implements  Dao<Products> {
         }
     }
 
+    // Save a new product to the database
     @Override
     public Products save(Products products) throws SQLException {
-        String sqlSave = "INSERT  INTO products (productId,productName,productCode,price,quantity,category,reorderLevel) VALUES (?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT  INTO products (products_productid, products_productname, products_productcode, products_price, products_quantity, products_category, products_reorderlevel) VALUES (?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, products.getProductId());
@@ -64,9 +84,10 @@ public class ProductsDao  implements  Dao<Products> {
         }
     }
 
+    // Update a product's details
     @Override
     public Products update(Products products, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE products SET productName = ?, productCode = ?, price = ?, quantity = ?, category = ?, reorderLevel = ? WHERE productId = ?";
+        String sqlUpdate = "UPDATE products SET products_productname = ?, products_productcode = ?, products_price = ?, products_quantity = ?, products_category = ?, products_reorderLevel = ? WHERE products_productcode = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -83,9 +104,10 @@ public class ProductsDao  implements  Dao<Products> {
         }
     }
 
+    // Delete a product by its product code
     @Override
     public Products delete(String id) throws SQLException {
-        String sqlDelete = "DELETE FROM products WHERE productId = ?";
+        String sqlDelete = "DELETE FROM products WHERE products_productcode = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);

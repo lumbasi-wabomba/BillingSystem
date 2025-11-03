@@ -9,10 +9,12 @@ import java.util.List;
 public class CustomerService {
     private  final CustomerDao customerDao;
 
+    // Constructor
     public CustomerService(CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
 
+    // Service methods for customer operations
     public   Customers getCustomer(Customers customer) throws SQLException{
         try{
             return customerDao.get(customer);

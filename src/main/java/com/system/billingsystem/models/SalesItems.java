@@ -18,6 +18,7 @@ public class SalesItems {
     private double total;
     private Date date;
 
+    // Constructor
     public SalesItems(String itemId, String productId, String saleId, String productName, String productCode, int quantity, double price, double total, Date date) {
         this.itemId = itemId;
         this.productId = productId;
@@ -29,11 +30,9 @@ public class SalesItems {
         this.total = total;
         this.date = date;
     };
+    public SalesItems() {}
 
-    public SalesItems() {
-
-    }
-
+    // Getters
     public String getItemId() {
         return itemId;
     };
