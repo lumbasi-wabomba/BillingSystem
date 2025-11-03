@@ -9,47 +9,68 @@ import java.util.List;
 
 public class CustomerDao implements Dao<Customers> {
 
-    public String getCutomerIdByEmail(String email) throws SQLException {
-        String sqlGetCustomerId = "";
+    //gets customer by email
+    public String getCustomerIdByEmail(String email) throws SQLException {
+        String sqlGetCustomerId = "SELECT customers_customerid, customers_email FROM customers WHERE customers_email=?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGetCustomerId = myConnection.prepareStatement(sqlGetCustomerId);
             statementGetCustomerId.setString(1, email);
             ResultSet resultSet = statementGetCustomerId.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("customer_id");
+                return resultSet.getString("customers_email");
             } else {
                 return null;
             }
         } catch (SQLException e) {
-            throw new SQLException("Error fetching customer ID by email: " + email, e);
+            throw new SQLException("Error fetching customer by email: " + email, e);
         }
     }
 
+    //gets all customer details after passing to the DB the customer email
     @Override
     public Customers get(Customers customers) throws SQLException {
-        String sqlGet = "SELECT * FROM customer WHERE customer_email=?";
+        String sqlGet = "SELECT * FROM customers WHERE customers_email=?";
             try(Connection myConnection = DatabaseConnection.getConnection()){
                 PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
-                statementGet.setString(1, customers.getCustomerId());
-                statementGet.setString(2, customers.getName());
-                statementGet.setString(3, customers.getEmail());
-                statementGet.setString(4, customers.getPhoneNumber());
-                statementGet.setDate(5, (Date) customers.getDate());
-                return (Customers) statementGet.executeQuery();
+
+                statementGet.setString(1, customers.getEmail());
+                ResultSet customerDetails = statementGet.executeQuery();
+
+                while (customerDetails.next()){
+                    Customers foundDetails = new Customers(
+                            customerDetails.getString("customers_customerid"),
+                            customerDetails.getString("customers_firstname"),
+                            customerDetails.getString("customers_lastname"),
+                            customerDetails.getString("customers_email"),
+                            customerDetails.getString("customers_phonenumber"),
+                            customerDetails.getDate("customers_date")
+                    );
+                    return foundDetails;
+                }
+                return null;
             } catch (Exception e) {
                 throw new SQLException("failed to fetch user", e);
             }
     }
 
+
+    //get all customers from the DB
     @Override
     public List<Customers> getAll() throws SQLException {
-        String sqlGetAll = "SELECT * FROM customer";
+        String sqlGetAll = "SELECT * FROM customers";
         List<Customers> customers = new ArrayList<>();
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
             ResultSet allCustomers = statementGetAll.executeQuery();
             while (allCustomers.next()){
-                customers.add(new Customers());
+                customers.add(new Customers(
+                        allCustomers.getString("customers_customerid"),
+                        allCustomers.getString("customers_firstname"),
+                        allCustomers.getString("customers_lastname"),
+                        allCustomers.getString("customers_email"),
+                        allCustomers.getString("customers_phonenumber"),
+                        allCustomers.getDate("customers_date")
+                ));
             }
             return customers;
         } catch (Exception e) {
@@ -57,9 +78,10 @@ public class CustomerDao implements Dao<Customers> {
         }
     }
 
+    //save customer to the DB
     @Override
     public Customers save(Customers customers) throws SQLException {
-        String sqlSave = "INSERT INTO customers (customerID,firstName,lastName,email,phoneNumber,date) VALUES (?,?,?,?,?,?) ";
+        String sqlSave = "INSERT INTO customers (customers_customerid,customers_firstname,customers_lastname,customers_email,customers_phonenumber,customers_date) VALUES (?,?,?,?,?,?) ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, customers.getCustomerId());
@@ -73,9 +95,10 @@ public class CustomerDao implements Dao<Customers> {
         }
     }
 
+    //update customer details in the DB
     @Override
     public Customers update(Customers customers, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE customers SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, date = ? WHERE customer_id = ? ";
+        String sqlUpdate = "UPDATE customers SET customers_firstname = ?, customers_lastname = ?, customers_email = ?, customers_phonenumber = ?, customers_date = ? WHERE customer_email = ? ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -90,6 +113,7 @@ public class CustomerDao implements Dao<Customers> {
         return null;
     }
 
+    //delete customer from the DB
     @Override
     public Customers delete(String id) throws SQLException {
         String  sqlDelete = "DELETE FROM customers WHERE customer_id = ?";

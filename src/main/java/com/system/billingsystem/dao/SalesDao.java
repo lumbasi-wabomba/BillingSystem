@@ -1,7 +1,6 @@
 package com.system.billingsystem.dao;
 
 import com.system.billingsystem.models.Sales;
-import com.system.billingsystem.models.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,9 +11,10 @@ import java.util.List;
 
 public class SalesDao  implements  Dao<Sales> {
 
+    //get sales by saleId
     @Override
     public Sales get(Sales sales) throws SQLException {
-        String sqlGet = "SELECT * FROM  sales WHERE saleId = ?";
+        String sqlGet = "SELECT * FROM  sales WHERE sales_saleid = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
             statementGet.setString(1, sales.getSaleId());
@@ -30,6 +30,7 @@ public class SalesDao  implements  Dao<Sales> {
         }
     }
 
+    //get all sales
     @Override
     public List<Sales> getAll() throws SQLException {
         String sqlGetAll = "SELECT * FROM sales";
@@ -38,7 +39,15 @@ public class SalesDao  implements  Dao<Sales> {
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
             ResultSet allSales = statementGetAll.executeQuery();
             while (allSales.next()) {
-                sales.add(new Sales());
+                sales.add(new Sales(
+                        allSales.getString("sales_saleid"),
+                        allSales.getString("customers_customerid"),
+                        allSales.getDate("sales_saledate"),
+                        allSales.getString("sales_salespersonid"),
+                        allSales.getDouble("sales_totalamount"),
+                        allSales.getString("sales_status"),
+                        allSales.getString("sales_paymentmethod")
+                ));
             };
             return sales;
         } catch (SQLException e) {
@@ -46,9 +55,10 @@ public class SalesDao  implements  Dao<Sales> {
         }
     }
 
+    //save sales
     @Override
     public Sales save(Sales sales) throws SQLException {
-        String sqlSave = "INSERT INTO sales (saleId,customerId,saleDate,salesPersonId,totalAmount,status,paymentMethod) VALUES (?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO sales (sales_salesid,sales_customerid,sales_saledate,sales_alespersonid,sales_totalamount,sales_status,sales_paymentMethod) VALUES (?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, sales.getSaleId());
@@ -65,9 +75,10 @@ public class SalesDao  implements  Dao<Sales> {
         }
     }
 
+    //update sales
     @Override
     public Sales update(Sales sales, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE sales SET customerId = ?, saleDate = ?, salesPersonId = ?, totalAmount = ?, status = ?, paymentMethod = ? WHERE saleId = ?";
+        String sqlUpdate = "UPDATE sales SET sales_customerid = ?, sales_saledate = ?, sales_salespersonid = ?, sales_totalamount = ?, sales_status = ?, sales_paymentmethod = ? WHERE sales_saleid = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -85,9 +96,10 @@ public class SalesDao  implements  Dao<Sales> {
         }
     }
 
+    //delete sales by saleId
     @Override
     public Sales delete(String id) throws SQLException {
-        String sqlDelete = "DELETE FROM sales WHERE saleID = ?";
+        String sqlDelete = "DELETE FROM sales WHERE sales_salesid = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
