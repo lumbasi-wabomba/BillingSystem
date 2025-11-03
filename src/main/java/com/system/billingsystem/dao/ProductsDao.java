@@ -12,7 +12,7 @@ import java.util.List;
 public class ProductsDao  implements  Dao<Products> {
     @Override
     public Products get(Products products) throws SQLException {
-        String sqlGet = "";
+        String sqlGet = "SELECT * FROM products WHERE productId = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
             statementGet.setString(1, products.getProductId());
@@ -31,7 +31,7 @@ public class ProductsDao  implements  Dao<Products> {
 
     @Override
     public List<Products> getAll() throws SQLException {
-        String sqlGetAll = "";
+        String sqlGetAll = "SELECT * FROM products";
         List<Products> products = new ArrayList<>();
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
@@ -47,7 +47,7 @@ public class ProductsDao  implements  Dao<Products> {
 
     @Override
     public Products save(Products products) throws SQLException {
-        String sqlSave = "";
+        String sqlSave = "INSERT  INTO products (productId,productName,productCode,price,quantity,category,reorderLevel) VALUES (?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, products.getProductId());
@@ -66,7 +66,7 @@ public class ProductsDao  implements  Dao<Products> {
 
     @Override
     public Products update(Products products, String[] params) throws SQLException {
-        String sqlUpdate = "";
+        String sqlUpdate = "UPDATE products SET productName = ?, productCode = ?, price = ?, quantity = ?, category = ?, reorderLevel = ? WHERE productId = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -85,7 +85,7 @@ public class ProductsDao  implements  Dao<Products> {
 
     @Override
     public Products delete(String id) throws SQLException {
-        String sqlDelete = "";
+        String sqlDelete = "DELETE FROM products WHERE productId = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);

@@ -11,7 +11,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
 
     @Override
     public SalesItems get(SalesItems salesItems) throws SQLException {
-        String sqlGet = "";
+        String sqlGet = "SELECT * FROM salesitems WHERE itemId = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
             statementGet.setString(1, salesItems.getItemId());
@@ -31,7 +31,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
 
     @Override
     public List<SalesItems> getAll() throws SQLException {
-        String sqlGetAll = "";
+        String sqlGetAll = "SELECT * FROM salesitems";
         List<SalesItems> sales = new ArrayList<>();
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
@@ -48,7 +48,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
 
     @Override
     public SalesItems save(SalesItems salesItems) throws SQLException {
-        String sqlSave = "";
+        String sqlSave = "INSERT INTO salesitems (itemId,productId,saleId,productName,productCode,quantity,price,total,date) VALUES (?,?,?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, salesItems.getItemId());
@@ -69,7 +69,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
 
     @Override
     public SalesItems update(SalesItems salesItems, String[] params) throws SQLException {
-        String sqlUpdate = "";
+        String sqlUpdate = "UPDATE salesitems SET productId = ?,saleId = ?, productName = ?, productCode = ?, quantity = ?, price = ?, total = ?, date = ? WHERE itemId = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -90,7 +90,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
 
     @Override
     public SalesItems delete(String id) throws SQLException {
-        String sqlDelete = "";
+        String sqlDelete = "DELETE FROM salesitems WHERE itemId = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
