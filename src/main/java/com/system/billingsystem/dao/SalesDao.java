@@ -14,7 +14,7 @@ public class SalesDao  implements  Dao<Sales> {
 
     @Override
     public Sales get(Sales sales) throws SQLException {
-        String sqlGet = "";
+        String sqlGet = "SELECT * FROM  sales WHERE saleId = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
             statementGet.setString(1, sales.getSaleId());
@@ -32,7 +32,7 @@ public class SalesDao  implements  Dao<Sales> {
 
     @Override
     public List<Sales> getAll() throws SQLException {
-        String sqlGetAll = "";
+        String sqlGetAll = "SELECT * FROM sales";
         List<Sales> sales = new ArrayList<>();
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
@@ -48,7 +48,7 @@ public class SalesDao  implements  Dao<Sales> {
 
     @Override
     public Sales save(Sales sales) throws SQLException {
-        String sqlSave = "";
+        String sqlSave = "INSERT INTO sales (saleId,customerId,saleDate,salesPersonId,totalAmount,status,paymentMethod) VALUES (?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, sales.getSaleId());
@@ -67,7 +67,7 @@ public class SalesDao  implements  Dao<Sales> {
 
     @Override
     public Sales update(Sales sales, String[] params) throws SQLException {
-        String sqlUpdate = "";
+        String sqlUpdate = "UPDATE sales SET customerId = ?, saleDate = ?, salesPersonId = ?, totalAmount = ?, status = ?, paymentMethod = ? WHERE saleId = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -87,7 +87,7 @@ public class SalesDao  implements  Dao<Sales> {
 
     @Override
     public Sales delete(String id) throws SQLException {
-        String sqlDelete = "";
+        String sqlDelete = "DELETE FROM sales WHERE saleID = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
             statementDelete.setString(1, id);
