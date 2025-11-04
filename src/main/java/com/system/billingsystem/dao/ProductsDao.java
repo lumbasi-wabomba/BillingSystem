@@ -80,8 +80,10 @@ public class ProductsDao  implements  Dao<Products> {
             statementSave.executeUpdate();
             return products;
         } catch (SQLException e) {
-            throw new SQLException("Error saving product", e);
+            //throw new SQLException("Error saving product", e);
+            e.printStackTrace();
         }
+        return null;
     }
 
     // Update a product's details

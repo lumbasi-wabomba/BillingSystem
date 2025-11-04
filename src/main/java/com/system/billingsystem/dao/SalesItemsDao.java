@@ -26,8 +26,8 @@ public class SalesItemsDao implements  Dao<SalesItems> {
                         soldItems.getString("salesitems_productcode"),
                         soldItems.getInt("salesitems_quantity"),
                         soldItems.getDouble("salesitems_price"),
-                        soldItems.getDouble("salesitems_total"),
-                        soldItems.getDate("salesitems_date")
+                        soldItems.getDouble("salesitems_total")
+                        //soldItems.getDate("salesitems_date")
                 );
                 return foundItems;
             }
@@ -54,8 +54,8 @@ public class SalesItemsDao implements  Dao<SalesItems> {
                         allsales.getString("salesitems_productcode"),
                         allsales.getInt("salesitems_quantity"),
                         allsales.getDouble("salesitems_price"),
-                        allsales.getDouble("salesitems_total"),
-                        allsales.getDate("salesitems_date")
+                        allsales.getDouble("salesitems_total")
+                       // allsales.getDate("salesitems_date")
                 ));
             } ;
             return sales;
@@ -68,7 +68,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
     //save sales item to the DB
     @Override
     public SalesItems save(SalesItems salesItems) throws SQLException {
-        String sqlSave = "INSERT INTO salesitems (salesitems_itemid,salesitems_productid,salesitems_saleid,salesitems_productname,salesitems_productcode,salesitems_quantity,salesitems_price,salesitems_total,salesitems_date) VALUES (?,?,?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO salesitems (salesitems_itemid,salesitems_productid,salesitems_saleid,salesitems_productname,salesitems_productcode,salesitems_quantity,salesitems_price,salesitems_total) VALUES (?,?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, salesItems.getItemId());
@@ -79,7 +79,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
             statementSave.setInt(6, salesItems.getQuantity());
             statementSave.setDouble(7, salesItems.getPrice());
             statementSave.setDouble(8, salesItems.getTotal());
-            statementSave.setDate(9, (Date) salesItems.getDate());
+           // statementSave.setDate(9, (Date) salesItems.getDate());
             statementSave.executeUpdate();
             return salesItems;
         } catch (SQLException e) {
@@ -90,7 +90,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
     //update sales item in the DB
     @Override
     public SalesItems update(SalesItems salesItems, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE salesitems SET  salesitems_productid= ?, salesitems_saleid= ?, salesitems_productname = ?, salesitems_productcode= ?, salesitems_quantity = ?,salesitems_price = ?, salesitems_total = ?,  salesitems_date= ? WHERE salesitems_itemid = ?";
+        String sqlUpdate = "UPDATE salesitems SET  salesitems_productid= ?, salesitems_saleid= ?, salesitems_productname = ?, salesitems_productcode= ?, salesitems_quantity = ?,salesitems_price = ?, salesitems_total = ?,  WHERE salesitems_itemid = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -101,7 +101,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
             statementUpdate.setInt(6, Integer.parseInt(params[5]));
             statementUpdate.setDouble(7, Double.parseDouble(params[6]));
             statementUpdate.setDouble(8, Double.parseDouble(params[7]));
-            statementUpdate.setDate(9, Date.valueOf(params[8]));
+            //statementUpdate.setDate(9, Date.valueOf(params[8]));
             statementUpdate.executeUpdate();
             return salesItems;
         } catch (SQLException e) {

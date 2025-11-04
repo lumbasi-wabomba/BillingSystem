@@ -12,16 +12,16 @@ public class Customers {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private Date date;
+    //private Date date;
 
     // Constructor
-    public Customers(String customerId, String firstName, String lastName, String email, String phoneNumber, Date date){
+    public Customers(String customerId, String firstName, String lastName, String email, String phoneNumber){
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.date = date;
+       // this.date = date;
     };
     public Customers() {}
 
@@ -38,7 +38,7 @@ public class Customers {
     public String getPhoneNumber() {
         return phoneNumber;
     };
-    public Date getDate() {
-        return date;
-    };
+//    public Date getDate() {
+//        return date;
+//    };
 }

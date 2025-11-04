@@ -12,20 +12,19 @@ public class User {
     private  String lastName;
     private  String email;
     private String role;
-    private Date date;
+   // private Date date;
     private String password;
     public int id =0;
 
     // Constructor
     public User(){};
-    public User(String userID, String username, String firstName, String lastName, String email, String role, Date date, String password){
+    public User(String userID, String username, String firstName, String lastName, String email, String role, String password){
         this.userID = userID;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.role = role;
-        this.date = date;
         this.password = password;
     };
 
@@ -42,9 +41,6 @@ public class User {
     };
     public String getRole() {
         return role;
-    };
-    public Date getDate() {
-        return date;
     };
     public String getPassword() {
         return  password;

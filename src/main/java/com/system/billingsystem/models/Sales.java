@@ -9,17 +9,17 @@ import java.util.Date;
 public class Sales {
     private String saleId;
     private String customerId;
-    private Date saleDate;
+    //private Date saleDate;
     private String salesPersonId;
     private double totalAmount;
     private  String status;
     private  String paymentMethod;
 
     // Constructor
-    public Sales(String saleId, String customerId, Date saleDate, String salesPersonId, double totalAmount, String status, String paymentMethod) {
+    public Sales(String saleId, String customerId, String salesPersonId, double totalAmount, String status, String paymentMethod) {
         this.saleId = saleId;
         this.customerId = customerId;
-        this.saleDate = saleDate;
+        //this.saleDate = saleDate;
         this.salesPersonId = salesPersonId;
         this.totalAmount = totalAmount;
         this.status = status;
@@ -36,9 +36,9 @@ public class Sales {
     public String getCustomerId() {
         return customerId;
     };
-    public Date getSaleDate() {
-        return saleDate;
-    };
+//    public Date getSaleDate() {
+//        return saleDate;
+//    };
     public String getSalesPersonId() {
         return salesPersonId;
     };

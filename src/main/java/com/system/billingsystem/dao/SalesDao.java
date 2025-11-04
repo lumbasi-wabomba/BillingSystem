@@ -19,15 +19,17 @@ public class SalesDao  implements  Dao<Sales> {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
             statementGet.setString(1, sales.getSaleId());
             statementGet.setString(2, sales.getCustomerId());
-            statementGet.setDate(3, (java.sql.Date) sales.getSaleDate());
+           // statementGet.setDate(3, (java.sql.Date) sales.getSaleDate());
             statementGet.setString(4, sales.getSalesPersonId());
             statementGet.setDouble(5, sales.getTotalAmount());
             statementGet.setString(6, sales.getStatus());
             statementGet.setString(7, sales.getPaymentMethod());
             return (Sales) statementGet.executeQuery();
         } catch (SQLException e) {
-            throw new SQLException("Error fetching sales" + 1 + 2 + 3, e);
+            //throw new SQLException("Error fetching sales" + 1 + 2 + 3, e);
+            e.printStackTrace();
         }
+        return null;
     }
 
     //get all sales
@@ -42,7 +44,7 @@ public class SalesDao  implements  Dao<Sales> {
                 sales.add(new Sales(
                         allSales.getString("sales_saleid"),
                         allSales.getString("customers_customerid"),
-                        allSales.getDate("sales_saledate"),
+                        //allSales.getDate("sales_saledate"),
                         allSales.getString("sales_salespersonid"),
                         allSales.getDouble("sales_totalamount"),
                         allSales.getString("sales_status"),
@@ -58,32 +60,34 @@ public class SalesDao  implements  Dao<Sales> {
     //save sales
     @Override
     public Sales save(Sales sales) throws SQLException {
-        String sqlSave = "INSERT INTO sales (sales_salesid,sales_customerid,sales_saledate,sales_alespersonid,sales_totalamount,sales_status,sales_paymentMethod) VALUES (?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO sales (sales_salesid,sales_customerid,sales_salespersonid,sales_totalamount,sales_status,sales_paymentMethod) VALUES (?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, sales.getSaleId());
             statementSave.setString(2, sales.getCustomerId());
-            statementSave.setDate(3, (java.sql.Date) sales.getSaleDate());
-            statementSave.setString(4, sales.getSalesPersonId());
-            statementSave.setDouble(5, sales.getTotalAmount());
-            statementSave.setString(6, sales.getStatus());
-            statementSave.setString(7, sales.getPaymentMethod());
+           // statementSave.setDate(3, (java.sql.Date) sales.getSaleDate());
+            statementSave.setString(3, sales.getSalesPersonId());
+            statementSave.setDouble(4, sales.getTotalAmount());
+            statementSave.setString(5, sales.getStatus());
+            statementSave.setString(6, sales.getPaymentMethod());
             statementSave.executeUpdate();
             return sales;
         } catch (SQLException e) {
-            throw new SQLException("Error saving sales", e);
+           // throw new SQLException("Error saving sales", e);
+            e.printStackTrace();
         }
+        return  null;
     }
 
     //update sales
     @Override
     public Sales update(Sales sales, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE sales SET sales_customerid = ?, sales_saledate = ?, sales_salespersonid = ?, sales_totalamount = ?, sales_status = ?, sales_paymentmethod = ? WHERE sales_saleid = ?";
+        String sqlUpdate = "UPDATE sales SET sales_customerid = ?, sales_salespersonid = ?, sales_totalamount = ?, sales_status = ?, sales_paymentmethod = ? WHERE sales_saleid = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
             statementUpdate.setString(2, params[1]);
-            statementUpdate.setDate(3, java.sql.Date.valueOf(params[2]));
+           // statementUpdate.setDate(3, java.sql.Date.valueOf(params[2]));
             statementUpdate.setString(4, params[4]);
             statementUpdate.setDouble(5, Double.parseDouble(params[3]));
             statementUpdate.setString(6, params[5]);

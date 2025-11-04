@@ -64,7 +64,6 @@ public class UserDao  implements Dao<User> {
                         userDetails.getString("user_lastname"),
                         userDetails.getString("user_email"),
                         userDetails.getString("user_role"),
-                        userDetails.getDate("user_date"),
                         userDetails.getString("user_password")
                 );
                 return foundDetails;
@@ -90,7 +89,6 @@ public class UserDao  implements Dao<User> {
                         allUsers.getString("user_lastname"),
                         allUsers.getString("user_email"),
                         allUsers.getString("user_role"),
-                        allUsers.getDate("user_date"),
                         allUsers.getString("user_password")
                 ));
             } ;
@@ -104,7 +102,7 @@ public class UserDao  implements Dao<User> {
     //used to post user details to the DB
     @Override
     public User save(User user) throws SQLException {
-        String sqlSave = "INSERT INTO user (user_userid,user_username,user_firstname,user_lastname,user_email,user_role,user_date,user_password) VALUES (?,?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO user (user_userid,user_username,user_firstname,user_lastname,user_email,user_role,user_password) VALUES (?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()){
            PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
 
@@ -118,20 +116,22 @@ public class UserDao  implements Dao<User> {
             statementSave.setString(4, lastName);
             statementSave.setString(5, user.getEmail());
             statementSave.setString(6, user.getRole());
-            statementSave.setDate(7, (Date) user.getDate());
-            statementSave.setString(8, user.getPassword());
+        //    statementSave.setDate(7, (Date) user.getDate());
+            statementSave.setString(7, user.getPassword());
 
             statementSave.executeUpdate();
             return user;
         } catch (SQLException e) {
-            throw new SQLException("Error saving user: " + user.getUserID(), e);
+            //throw new SQLException("Error saving user: " + user.getUserID(), e);
+            e.printStackTrace();
         }
+        return  null;
     }
 
     //updates the user details on the DB
     @Override
     public User update(User user, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE user SET user_username = ?,User_firstname = ?, user_lastname = ?, user_email = ?, user_role = ?, user_date = ?, user_password = ? WHERE user_email = ?";
+        String sqlUpdate = "UPDATE user SET user_username = ?,User_firstname = ?, user_lastname = ?, user_email = ?, user_role = ?, user_password = ? WHERE user_email = ?";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
@@ -139,9 +139,9 @@ public class UserDao  implements Dao<User> {
             statementUpdate.setString(3, params[2]);
             statementUpdate.setString(4, params[3]);
             statementUpdate.setString(5, params[4]);
-            statementUpdate.setDate(6, Date.valueOf(params[5]));
-            statementUpdate.setString(7, params[6]);
-            statementUpdate.setString(8, user.getEmail());
+            //statementUpdate.setDate(6, Date.valueOf(params[5]));
+            statementUpdate.setString(6, params[5]);
+            statementUpdate.setString(7, user.getEmail());
 
             statementUpdate.executeUpdate();
         }catch (Exception e) {

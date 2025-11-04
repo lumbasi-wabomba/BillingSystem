@@ -42,8 +42,8 @@ public class CustomerDao implements Dao<Customers> {
                             customerDetails.getString("customers_firstname"),
                             customerDetails.getString("customers_lastname"),
                             customerDetails.getString("customers_email"),
-                            customerDetails.getString("customers_phonenumber"),
-                            customerDetails.getDate("customers_date")
+                            customerDetails.getString("customers_phonenumber")
+
                     );
                     return foundDetails;
                 }
@@ -68,8 +68,8 @@ public class CustomerDao implements Dao<Customers> {
                         allCustomers.getString("customers_firstname"),
                         allCustomers.getString("customers_lastname"),
                         allCustomers.getString("customers_email"),
-                        allCustomers.getString("customers_phonenumber"),
-                        allCustomers.getDate("customers_date")
+                        allCustomers.getString("customers_phonenumber")
+                        //allCustomers.getDate("customers_date")
                 ));
             }
             return customers;
@@ -81,32 +81,40 @@ public class CustomerDao implements Dao<Customers> {
     //save customer to the DB
     @Override
     public Customers save(Customers customers) throws SQLException {
-        String sqlSave = "INSERT INTO customers (customers_customerid,customers_firstname,customers_lastname,customers_email,customers_phonenumber,customers_date) VALUES (?,?,?,?,?,?) ";
+        String sqlSave = "INSERT INTO customers (customers_customerid,customers_firstname,customers_lastname,customers_email,customers_phonenumber) VALUES (?,?,?,?,?) ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
+
+            String[] name = customers.getName().split(" ", 2);
+            String firstName = name[0];
+            String lastName = name[1];
+
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, customers.getCustomerId());
-            statementSave.setString(2, customers.getName());
-            statementSave.setString(3, customers.getEmail());
-            statementSave.setString(4, customers.getPhoneNumber());
-            statementSave.setDate(5, (Date) customers.getDate());
+            statementSave.setString(2, firstName);
+            statementSave.setString(3, lastName);
+            statementSave.setString(4, customers.getEmail());
+            statementSave.setString(5, customers.getPhoneNumber());
+            //statementSave.setDate(5, (Date) customers.getDate());
             statementSave.executeUpdate();
             return customers;
         } catch (SQLException e) {
-            throw new SQLException("Error saving user: " + customers.getCustomerId(), e);
+            //throw new SQLException("Error saving user: " + customers.getCustomerId(), e);
+            e.printStackTrace();
         }
+        return null;
     }
 
     //update customer details in the DB
     @Override
     public Customers update(Customers customers, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE customers SET customers_firstname = ?, customers_lastname = ?, customers_email = ?, customers_phonenumber = ?, customers_date = ? WHERE customer_email = ? ";
+        String sqlUpdate = "UPDATE customers SET customers_firstname = ?, customers_lastname = ?, customers_email = ?, customers_phonenumber = ? WHERE customer_email = ? ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
             PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
             statementUpdate.setString(1, params[0]);
             statementUpdate.setString(2, params[1]);
             statementUpdate.setString(3, params[2]);
             statementUpdate.setString(4, params[3]);
-            statementUpdate.setDate(5, Date.valueOf(params[4]));
+            //statementUpdate.setDate(5, Date.valueOf(params[4]));
             statementUpdate.executeUpdate();
         }catch (Exception e) {
             throw new SQLException("Error while updating", e);

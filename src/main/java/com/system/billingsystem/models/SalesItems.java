@@ -16,10 +16,10 @@ public class SalesItems {
     private int quantity;
     private double price;
     private double total;
-    private Date date;
+    //private Date date;
 
     // Constructor
-    public SalesItems(String itemId, String productId, String saleId, String productName, String productCode, int quantity, double price, double total, Date date) {
+    public SalesItems(String itemId, String productId, String saleId, String productName, String productCode, int quantity, double price, double total) {
         this.itemId = itemId;
         this.productId = productId;
         this.saleId = saleId;
@@ -28,7 +28,7 @@ public class SalesItems {
         this.quantity = quantity;
         this.price = price;
         this.total = total;
-        this.date = date;
+       // this.date = date;
     };
     public SalesItems() {}
 
@@ -57,8 +57,8 @@ public class SalesItems {
     public double getTotal() {
         return total;
     };
-    public Date getDate() {
-        return date;
-    };
+//    public Date getDate() {
+//        return date;
+//    };
 
 }
