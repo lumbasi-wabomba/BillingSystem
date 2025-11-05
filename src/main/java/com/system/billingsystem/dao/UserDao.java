@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 
 
 public class UserDao  implements Dao<User> {
@@ -48,12 +47,12 @@ public class UserDao  implements Dao<User> {
 
     //to get all the customer detail after passing the email to the DB, DB returns all the details
     @Override
-    public User get(User user) throws SQLException {
+    public User get(String email) throws SQLException {
         String sqlGet = "SELECT * FROM  user WHERE user_email = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet= myConnection.prepareStatement(sqlGet);
 
-            statementGet.setString(1, user.getEmail());
+            statementGet.setString(1, email);
             ResultSet userDetails = statementGet.executeQuery();
 
             while (userDetails.next()) {

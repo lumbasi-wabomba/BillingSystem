@@ -14,9 +14,9 @@ public class SalesService {
     }
 
     // Service methods for sales operations
-    public Sales getSale(Sales sale) throws SQLException {
+    public Sales getSale(String saleID) throws SQLException {
         try{
-            return  salesDao.get(sale);
+            return  salesDao.get(saleID);
         } catch (Exception e) {
             throw new SQLException("Error: "+ e.getMessage(), e);
         }

@@ -14,9 +14,9 @@ public class SalesItemsService {
     }
 
     // Service methods for sales item operations
-    public SalesItems getSoldItem(SalesItems soldItem) throws SQLException{
+    public SalesItems getSoldItem(String itemID) throws SQLException{
         try{
-            return salesItemsDao.get(soldItem);
+            return salesItemsDao.get(itemID);
         } catch (Exception e) {
             throw new SQLException("Error: "+ e.getMessage(), e);
         }

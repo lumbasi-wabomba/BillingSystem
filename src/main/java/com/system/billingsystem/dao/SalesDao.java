@@ -13,18 +13,24 @@ public class SalesDao  implements  Dao<Sales> {
 
     //get sales by saleId
     @Override
-    public Sales get(Sales sales) throws SQLException {
+    public Sales get(String saleID) throws SQLException {
         String sqlGet = "SELECT * FROM  sales WHERE sales_saleid = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
-            statementGet.setString(1, sales.getSaleId());
-            statementGet.setString(2, sales.getCustomerId());
-           // statementGet.setDate(3, (java.sql.Date) sales.getSaleDate());
-            statementGet.setString(4, sales.getSalesPersonId());
-            statementGet.setDouble(5, sales.getTotalAmount());
-            statementGet.setString(6, sales.getStatus());
-            statementGet.setString(7, sales.getPaymentMethod());
-            return (Sales) statementGet.executeQuery();
+            statementGet.setString(1, saleID);
+            ResultSet saleDetails = statementGet.executeQuery();
+
+            while (saleDetails.next()){
+                Sales foundSales = new Sales(
+                        saleDetails.getString("sales_salesid"),
+                        saleDetails.getString("sales_customerid"),
+                        saleDetails.getString("sales_salespersonid"),
+                        saleDetails.getDouble("sales_totalamount"),
+                        saleDetails.getString("sales_status"),
+                        saleDetails.getString("sales_paymentmethod")
+                );
+                return foundSales;
+            }
         } catch (SQLException e) {
             //throw new SQLException("Error fetching sales" + 1 + 2 + 3, e);
             e.printStackTrace();

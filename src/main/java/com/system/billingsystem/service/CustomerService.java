@@ -15,9 +15,9 @@ public class CustomerService {
     }
 
     // Service methods for customer operations
-    public   Customers getCustomer(Customers customer) throws SQLException{
+    public   Customers getCustomer(String email) throws SQLException{
         try{
-            return customerDao.get(customer);
+            return customerDao.get(email);
         } catch (Exception e) {
             throw new SQLException("Error: " + e.getMessage(), e );
         }

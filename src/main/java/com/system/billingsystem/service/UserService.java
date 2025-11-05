@@ -20,9 +20,9 @@ public class UserService {
     }
 
     // Service methods for user operations
-    public User getUser(User user) throws SQLException {
+    public User getUser(String email) throws SQLException {
         try {
-            return userDao.get(user);
+            return userDao.get(email);
         } catch (Exception e) {
             throw new SQLException("Error:" + e.getMessage(), e);
         }

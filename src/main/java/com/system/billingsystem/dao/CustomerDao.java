@@ -1,7 +1,6 @@
 package com.system.billingsystem.dao;
 
 import com.system.billingsystem.models.Customers;
-import com.system.billingsystem.models.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,12 +27,12 @@ public class CustomerDao implements Dao<Customers> {
 
     //gets all customer details after passing to the DB the customer email
     @Override
-    public Customers get(Customers customers) throws SQLException {
+    public Customers get(String email) throws SQLException {
         String sqlGet = "SELECT * FROM customers WHERE customers_email=?";
             try(Connection myConnection = DatabaseConnection.getConnection()){
                 PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
 
-                statementGet.setString(1, customers.getEmail());
+                statementGet.setString(1, email);
                 ResultSet customerDetails = statementGet.executeQuery();
 
                 while (customerDetails.next()){

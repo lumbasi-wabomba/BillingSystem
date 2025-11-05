@@ -14,9 +14,9 @@ public class ProductsService {
     }
 
     // Service methods for product operations
-    public Products getProduct(Products product) throws SQLException {
+    public Products getProduct(String productCode) throws SQLException {
         try{
-            return productsDao.get(product);
+            return productsDao.get(productCode);
         } catch (SQLException e) {
             throw new SQLException("Error: "+ e.getMessage(), e);
         }

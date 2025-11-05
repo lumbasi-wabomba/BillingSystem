@@ -13,12 +13,12 @@ public class ProductsDao  implements  Dao<Products> {
 
     // Get a product by its product code
     @Override
-    public Products get(Products products) throws SQLException {
+    public Products get(String productCode) throws SQLException {
         String sqlGet = "SELECT * FROM products WHERE products_productcode = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
 
-            statementGet.setString(1, products.getProductCode());
+            statementGet.setString(1, productCode);
             ResultSet productDetails = statementGet.executeQuery();
             while (productDetails.next()) {
                 Products foundDetails = new Products(

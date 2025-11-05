@@ -10,11 +10,11 @@ public class SalesItemsDao implements  Dao<SalesItems> {
 
     //get a sales item from the DB
     @Override
-    public SalesItems get(SalesItems salesItems) throws SQLException {
+    public SalesItems get(String itemID) throws SQLException {
         String sqlGet = "SELECT * FROM salesitems WHERE salesitems_itemid = ?";
         try (Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
-            statementGet.setString(1, salesItems.getItemId());
+            statementGet.setString(1, itemID);
             ResultSet soldItems = statementGet.executeQuery();
 
             while(soldItems.next()){
