@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Date;
 
 
 public class UserDao  implements Dao<User> {
@@ -63,7 +64,8 @@ public class UserDao  implements Dao<User> {
                         userDetails.getString("user_lastname"),
                         userDetails.getString("user_email"),
                         userDetails.getString("user_role"),
-                        userDetails.getString("user_password")
+                        userDetails.getString("user_password"),
+                        userDetails.getDate("user_date")
                 );
                 return foundDetails;
             }
@@ -88,7 +90,8 @@ public class UserDao  implements Dao<User> {
                         allUsers.getString("user_lastname"),
                         allUsers.getString("user_email"),
                         allUsers.getString("user_role"),
-                        allUsers.getString("user_password")
+                        allUsers.getString("user_password"),
+                        allUsers.getDate("user_date")
                 ));
             } ;
             return users;
@@ -101,7 +104,7 @@ public class UserDao  implements Dao<User> {
     //used to post user details to the DB
     @Override
     public User save(User user) throws SQLException {
-        String sqlSave = "INSERT INTO user (user_userid,user_username,user_firstname,user_lastname,user_email,user_role,user_password) VALUES (?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO user (user_userid,user_username,user_firstname,user_lastname,user_email,user_role,user_password, user_date) VALUES (?,?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()){
            PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
 
@@ -115,8 +118,8 @@ public class UserDao  implements Dao<User> {
             statementSave.setString(4, lastName);
             statementSave.setString(5, user.getEmail());
             statementSave.setString(6, user.getRole());
-        //    statementSave.setDate(7, (Date) user.getDate());
             statementSave.setString(7, user.getPassword());
+            statementSave.setDate(8, (Date) user.getDate());
 
             statementSave.executeUpdate();
             return user;

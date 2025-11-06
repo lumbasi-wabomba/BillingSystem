@@ -1,6 +1,6 @@
 package com.system.billingsystem.models;
 
-import java.util.Date;
+import java.sql.Date;
 /*
 * this is the User model class
 * it contains the user attributes(userID, name, email, role, date created, password) and their getters
@@ -12,13 +12,13 @@ public class User {
     private  String lastName;
     private  String email;
     private String role;
-   // private Date date;
+    private Date date;
     private String password;
     public int id =0;
 
     // Constructor
     public User(){};
-    public User(String userID, String username, String firstName, String lastName, String email, String role, String password){
+    public User(String userID, String username, String firstName, String lastName, String email, String role, String password, Date date){
         this.userID = userID;
         this.username = username;
         this.firstName = firstName;
@@ -26,6 +26,21 @@ public class User {
         this.email = email;
         this.role = role;
         this.password = password;
+        this.date = date;
+    };
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID='" + userID + '\'' +
+                ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", date=" + date +
+                ", password='" + password + '\'' +
+                '}';
     };
 
     // getters of the attributes of class User
@@ -44,6 +59,9 @@ public class User {
     };
     public String getPassword() {
         return  password;
+    };
+    public Date getDate() {
+        return date;
     };
 
     //method for generating userID

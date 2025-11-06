@@ -1,6 +1,6 @@
 package com.system.billingsystem.models;
 
-import java.util.Date;
+import java.sql.Date;
 
 /*
 * this class represents a sales item in the billing system.
@@ -16,10 +16,10 @@ public class SalesItems {
     private int quantity;
     private double price;
     private double total;
-    //private Date date;
+    private Date date;
 
     // Constructor
-    public SalesItems(String itemId, String productId, String saleId, String productName, String productCode, int quantity, double price, double total) {
+    public SalesItems(String itemId, String productId, String saleId, String productName, String productCode, int quantity, double price, double total, Date date) {
         this.itemId = itemId;
         this.productId = productId;
         this.saleId = saleId;
@@ -28,7 +28,22 @@ public class SalesItems {
         this.quantity = quantity;
         this.price = price;
         this.total = total;
-       // this.date = date;
+        this.date = date;
+    };
+
+    @Override
+    public String toString() {
+        return "SalesItems{" +
+                "itemId='" + itemId + '\'' +
+                ", productId='" + productId + '\'' +
+                ", saleId='" + saleId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productCode='" + productCode + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", total=" + total +
+                ", date=" + date +
+                '}';
     };
     public SalesItems() {}
 
@@ -57,8 +72,8 @@ public class SalesItems {
     public double getTotal() {
         return total;
     };
-//    public Date getDate() {
-//        return date;
-//    };
+    public Date getDate() {
+        return date;
+    };
 
 }

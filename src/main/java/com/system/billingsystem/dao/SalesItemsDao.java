@@ -26,8 +26,8 @@ public class SalesItemsDao implements  Dao<SalesItems> {
                         soldItems.getString("salesitems_productcode"),
                         soldItems.getInt("salesitems_quantity"),
                         soldItems.getDouble("salesitems_price"),
-                        soldItems.getDouble("salesitems_total")
-                        //soldItems.getDate("salesitems_date")
+                        soldItems.getDouble("salesitems_total"),
+                        soldItems.getDate("salesitems_date")
                 );
                 return foundItems;
             }
@@ -54,8 +54,8 @@ public class SalesItemsDao implements  Dao<SalesItems> {
                         allsales.getString("salesitems_productcode"),
                         allsales.getInt("salesitems_quantity"),
                         allsales.getDouble("salesitems_price"),
-                        allsales.getDouble("salesitems_total")
-                       // allsales.getDate("salesitems_date")
+                        allsales.getDouble("salesitems_total"),
+                       allsales.getDate("salesitems_date")
                 ));
             } ;
             return sales;
@@ -68,7 +68,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
     //save sales item to the DB
     @Override
     public SalesItems save(SalesItems salesItems) throws SQLException {
-        String sqlSave = "INSERT INTO salesitems (salesitems_itemid,salesitems_productid,salesitems_saleid,salesitems_productname,salesitems_productcode,salesitems_quantity,salesitems_price,salesitems_total) VALUES (?,?,?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO salesitems (salesitems_itemid,salesitems_productid,salesitems_saleid,salesitems_productname,salesitems_productcode,salesitems_quantity,salesitems_price,salesitems_total, salesitems_date) VALUES (?,?,?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, salesItems.getItemId());
@@ -79,7 +79,7 @@ public class SalesItemsDao implements  Dao<SalesItems> {
             statementSave.setInt(6, salesItems.getQuantity());
             statementSave.setDouble(7, salesItems.getPrice());
             statementSave.setDouble(8, salesItems.getTotal());
-           // statementSave.setDate(9, (Date) salesItems.getDate());
+            statementSave.setDate(9, (Date) salesItems.getDate());
             statementSave.executeUpdate();
             return salesItems;
         } catch (SQLException e) {

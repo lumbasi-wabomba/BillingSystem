@@ -27,7 +27,8 @@ public class SalesDao  implements  Dao<Sales> {
                         saleDetails.getString("sales_salespersonid"),
                         saleDetails.getDouble("sales_totalamount"),
                         saleDetails.getString("sales_status"),
-                        saleDetails.getString("sales_paymentmethod")
+                        saleDetails.getString("sales_paymentmethod"),
+                        saleDetails.getDate("sales_saledate")
                 );
                 return foundSales;
             }
@@ -50,11 +51,11 @@ public class SalesDao  implements  Dao<Sales> {
                 sales.add(new Sales(
                         allSales.getString("sales_saleid"),
                         allSales.getString("customers_customerid"),
-                        //allSales.getDate("sales_saledate"),
                         allSales.getString("sales_salespersonid"),
                         allSales.getDouble("sales_totalamount"),
                         allSales.getString("sales_status"),
-                        allSales.getString("sales_paymentmethod")
+                        allSales.getString("sales_paymentmethod"),
+                        allSales.getDate("sales_saledate")
                 ));
             };
             return sales;
@@ -66,16 +67,16 @@ public class SalesDao  implements  Dao<Sales> {
     //save sales
     @Override
     public Sales save(Sales sales) throws SQLException {
-        String sqlSave = "INSERT INTO sales (sales_salesid,sales_customerid,sales_salespersonid,sales_totalamount,sales_status,sales_paymentMethod) VALUES (?,?,?,?,?,?)";
+        String sqlSave = "INSERT INTO sales (sales_salesid,sales_customerid,sales_salespersonid,sales_totalamount,sales_status,sales_paymentMethod, sales_saledate) VALUES (?,?,?,?,?,?,?)";
         try(Connection myConnection = DatabaseConnection.getConnection()) {
             PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
             statementSave.setString(1, sales.getSaleId());
             statementSave.setString(2, sales.getCustomerId());
-           // statementSave.setDate(3, (java.sql.Date) sales.getSaleDate());
-            statementSave.setString(3, sales.getSalesPersonId());
-            statementSave.setDouble(4, sales.getTotalAmount());
-            statementSave.setString(5, sales.getStatus());
-            statementSave.setString(6, sales.getPaymentMethod());
+            statementSave.setDate(3, (java.sql.Date) sales.getSaleDate());
+            statementSave.setString(4, sales.getSalesPersonId());
+            statementSave.setDouble(5, sales.getTotalAmount());
+            statementSave.setString(6, sales.getStatus());
+            statementSave.setString(7, sales.getPaymentMethod());
             statementSave.executeUpdate();
             return sales;
         } catch (SQLException e) {
@@ -94,10 +95,10 @@ public class SalesDao  implements  Dao<Sales> {
             statementUpdate.setString(1, params[0]);
             statementUpdate.setString(2, params[1]);
            // statementUpdate.setDate(3, java.sql.Date.valueOf(params[2]));
-            statementUpdate.setString(4, params[4]);
-            statementUpdate.setDouble(5, Double.parseDouble(params[3]));
-            statementUpdate.setString(6, params[5]);
-            statementUpdate.setString(7, params[6]);
+            statementUpdate.setString(3, params[2]);
+            statementUpdate.setDouble(4, Double.parseDouble(params[3]));
+            statementUpdate.setString(5, params[3]);
+            statementUpdate.setString(6, params[4]);
 
             statementUpdate.executeUpdate();
             return sales;

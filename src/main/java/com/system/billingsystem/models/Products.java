@@ -22,6 +22,19 @@ public class Products {
         this.category = category;
         this.reorderLevel = reorderLevel;
     };
+
+    @Override
+    public String toString() {
+        return "Products{" +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productCode='" + productCode + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", category='" + category + '\'' +
+                ", reorderLevel=" + reorderLevel +
+                '}';
+    };
     public Products() {
 
     }

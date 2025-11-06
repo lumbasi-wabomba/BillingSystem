@@ -41,7 +41,8 @@ public class CustomerDao implements Dao<Customers> {
                             customerDetails.getString("customers_firstname"),
                             customerDetails.getString("customers_lastname"),
                             customerDetails.getString("customers_email"),
-                            customerDetails.getString("customers_phonenumber")
+                            customerDetails.getString("customers_phonenumber"),
+                            customerDetails.getDate("customers_date")
 
                     );
                     return foundDetails;
@@ -67,8 +68,8 @@ public class CustomerDao implements Dao<Customers> {
                         allCustomers.getString("customers_firstname"),
                         allCustomers.getString("customers_lastname"),
                         allCustomers.getString("customers_email"),
-                        allCustomers.getString("customers_phonenumber")
-                        //allCustomers.getDate("customers_date")
+                        allCustomers.getString("customers_phonenumber"),
+                        allCustomers.getDate("customers_date")
                 ));
             }
             return customers;
@@ -80,7 +81,7 @@ public class CustomerDao implements Dao<Customers> {
     //save customer to the DB
     @Override
     public Customers save(Customers customers) throws SQLException {
-        String sqlSave = "INSERT INTO customers (customers_customerid,customers_firstname,customers_lastname,customers_email,customers_phonenumber) VALUES (?,?,?,?,?) ";
+        String sqlSave = "INSERT INTO customers (customers_customerid,customers_firstname,customers_lastname,customers_email,customers_phonenumber, customers_date) VALUES (?,?,?,?,?,?) ";
         try(Connection myConnection = DatabaseConnection.getConnection()){
 
             String[] name = customers.getName().split(" ", 2);
@@ -93,7 +94,7 @@ public class CustomerDao implements Dao<Customers> {
             statementSave.setString(3, lastName);
             statementSave.setString(4, customers.getEmail());
             statementSave.setString(5, customers.getPhoneNumber());
-            //statementSave.setDate(5, (Date) customers.getDate());
+            statementSave.setDate(6, (Date) customers.getDate());
             statementSave.executeUpdate();
             return customers;
         } catch (SQLException e) {

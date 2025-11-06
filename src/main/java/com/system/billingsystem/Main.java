@@ -4,46 +4,48 @@ package com.system.billingsystem;
 
 import com.system.billingsystem.dao.*;
 import com.system.billingsystem.models.*;
+import com.system.billingsystem.service.CustomerService;
 import com.system.billingsystem.service.UserService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.sql.Date;
 
-public class Main extends Application {
-    @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/login.fxml"));
-        Scene scene = new Scene(loader.load(), 560,500);
-        stage.setTitle("Login");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch();
-    }
-}
-
-//public  class Main {
+//public class Main extends Application {
+//    @Override
+//    public void start(Stage stage) throws Exception {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/login.fxml"));
+//        Scene scene = new Scene(loader.load(), 560,500);
+//        stage.setTitle("Login");
+//        stage.setScene(scene);
+//        stage.show();
+//    }
+//
 //    public static void main(String[] args) {
-////        String userID = "U01";
-////        String username = "johndoe";
-////        String firstName = "John";
-////        String lastName = "Doe";
-////        String email = "johndoe@gmail.com";
-////        String role = "admin";
-////        //java.util.Date date = new java.util.Date();
-////        String password = "password123";
-////        User user = new User(userID, username, firstName, lastName, email, role, password);
-////        UserDao userDao = new UserDao();
-////        UserService userService = new UserService(userDao);
-////        try {
-////            userService.saveUser(user);
-////            System.out.println("User saved successfully!");
-////        } catch (Exception e) {
-////            System.out.println("Error saving user: " + e.getMessage());
-////        }
+//        launch();
+//    }
+//}
+
+public  class Main {
+    public static void main(String[] args) {
+//        String userID = "U02";
+//        String username = "johndoe";
+//        String firstName = "John";
+//        String lastName = "Doe";
+//        String email = "johndoe@gmail.com";
+//        String role = "admin";
+//        Date myDate = new Date(System.currentTimeMillis());
+//        String password = "password123";
+//        User user = new User(userID, username, firstName, lastName, email, role, password, myDate);
+//        UserDao userDao = new UserDao();
+//        UserService userService = new UserService(userDao);
+//        try {
+//            userService.saveUser(user);
+//            System.out.println("User saved successfully!");
+//        } catch (Exception e) {
+//            System.out.println("Error saving user: " + e.getMessage());
+//        }
 //
 ////        String customerID = "C01";
 ////        String firstName = "Jane";
@@ -111,5 +113,14 @@ public class Main extends Application {
 ////        } catch (Exception e) {
 ////            System.out.println("Error:" + e.getMessage());
 ////        }
-//    }
-//}
+
+        String email = "janesmith@gmail.com";
+        CustomerDao customerDao = new CustomerDao();
+        CustomerService customerService = new CustomerService(customerDao);
+        try {
+           System.out.println(customerService.getCustomer(email));
+        } catch (Exception e) {
+            System.out.println( e.getMessage());
+        }
+  }
+}
