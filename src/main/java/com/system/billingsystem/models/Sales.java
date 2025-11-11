@@ -51,4 +51,33 @@ public class Sales {
     public String getPaymentMethod() {
         return paymentMethod;
     };
+
+    // Setters
+    public void setSaleId(String saleId) {
+        this.saleId = saleId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setSaleDate(Date saleDate) {
+        this.saleDate = saleDate;
+    }
+
+    public void setSalesPersonId(String salesPersonId) {
+        this.salesPersonId = salesPersonId;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 }

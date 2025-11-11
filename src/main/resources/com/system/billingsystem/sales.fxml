@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.system.billingsystem.controller.SalesController"
+      spacing="16" style="-fx-padding: 16;">
+    
+    <!-- Header -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Sales History" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="refreshButton" text="Refresh" />
+    </HBox>
+    
+    <!-- Search Bar -->
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search by Sale ID, Customer, Cashier, Payment Method..." HBox.hgrow="ALWAYS"/>
+        <Button fx:id="searchButton" text="Search" styleClass="primary-button"/>
+        <Button fx:id="clearSearchButton" text="Clear"/>
+    </HBox>
+
+    <!-- Sales Table -->
+    <TableView fx:id="salesTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="Sale ID" prefWidth="120"/>
+            <TableColumn fx:id="colCustomerId" text="Customer" prefWidth="120"/>
+            <TableColumn fx:id="colCreatedBy" text="Cashier" prefWidth="100"/>
+            <TableColumn fx:id="colTotalAmount" text="Total Amount" prefWidth="120"/>
+            <TableColumn fx:id="colPaymentMethod" text="Payment" prefWidth="100"/>
+            <TableColumn fx:id="colStatus" text="Status" prefWidth="100"/>
+            <TableColumn fx:id="colCreatedAt" text="Date &amp; Time" prefWidth="180"/>
+            <TableColumn fx:id="colActions" text="Actions" prefWidth="180"/>
+        </columns>
+    </TableView>
+</VBox>

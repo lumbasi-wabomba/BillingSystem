@@ -25,9 +25,13 @@
         <Button fx:id="dashboardButton" text="Dashboard" styleClass="nav-button"/>
         <Button fx:id="newSaleButton" text="New Sale" styleClass="nav-button"/>
         <Button fx:id="manageInventoryButton" text="Manage Inventory" styleClass="nav-button"/>
-        <Button fx:id="paymentsButton" text="Payments" styleClass="nav-button"/>
+        <!-- <Button fx:id="paymentsButton" text="Payments" styleClass="nav-button"/> -->
         <Button fx:id="salesButton" text="Sales" styleClass="nav-button"/>
-        <Button fx:id="purchasesButton" text="Purchases" styleClass="nav-button"/>
+        <Button fx:id="invoicesButton" text="Invoices" styleClass="nav-button"/>
+        <!-- <Button fx:id="receiptsButton" text="Receipts" styleClass="nav-button"/> -->
+        <!-- <Button fx:id="purchasesButton" text="Purchases" styleClass="nav-button"/> -->
+        <Button fx:id="customersButton" text="Customers" styleClass="nav-button"/>
+        <Button fx:id="receiptsButton" text="Receipts" styleClass="nav-button"/>
     </HBox>
 
 </HBox>

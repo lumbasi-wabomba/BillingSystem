@@ -1,5 +1,8 @@
 package com.system.billingsystem.controller;
 
+import com.system.billingsystem.dao.UserDao;
+import com.system.billingsystem.models.User;
+import com.system.billingsystem.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +17,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class SignupController implements Initializable {
@@ -27,8 +32,16 @@ public class SignupController implements Initializable {
     @FXML private Button signupButton;
     @FXML private Button goToLoginButton;
 
+    private UserService userService;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            userService = new UserService(new UserDao());
+        } catch (Exception e) {
+            showError("Failed to initialize user service: " + e.getMessage());
+        }
+
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
 
@@ -37,29 +50,27 @@ public class SignupController implements Initializable {
                 doSignup();
             }
         };
-        if (firstNameField != null) firstNameField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
-        if (lastNameField != null) lastNameField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
-        if (emailField != null) emailField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
-        if (passwordField != null) passwordField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
-        if (confirmField != null) confirmField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
 
-        if (signupButton != null) signupButton.addEventHandler(ActionEvent.ACTION, (EventHandler<ActionEvent>) e -> doSignup());
-        if (goToLoginButton != null) goToLoginButton.addEventHandler(ActionEvent.ACTION, (EventHandler<ActionEvent>) e -> goToLogin());
+        firstNameField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
+        lastNameField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
+        emailField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
+        passwordField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
+        confirmField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
+
+        signupButton.setOnAction(e -> doSignup());
+        goToLoginButton.setOnAction(e -> goToLogin());
     }
 
-
     private void doSignup() {
-        // hide previous errors
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
 
-        String firstName = firstNameField.getText() == null ? "" : firstNameField.getText().trim();
-        String lastName = lastNameField.getText() == null ? "" : lastNameField.getText().trim();
-        String email = emailField.getText() == null ? "" : emailField.getText().trim();
-        String password = passwordField.getText() == null ? "" : passwordField.getText();
-        String confirm = confirmField.getText() == null ? "" : confirmField.getText();
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
+        String email = emailField.getText().trim();
+        String password = passwordField.getText();
+        String confirm = confirmField.getText();
 
-        // require both first and last name
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
             showError("Please fill in all fields.");
             return;
@@ -70,26 +81,41 @@ public class SignupController implements Initializable {
             return;
         }
 
-        // email val
         if (!email.contains("@") || !email.contains(".")) {
             showError("Enter a valid email address.");
             return;
         }
 
-        String fullName = firstName + " " + lastName;
-        System.out.println("Signup OK for: " + email + " (" + fullName + ")");
+        // Generate user ID
+        User tempUser = new User();
+        String userId = tempUser.generateUserID();
+
+        // Create User object
+        User newUser = new User(
+            userId,
+            email, // username as email
+            firstName,
+            lastName,
+            email,
+            "user", // default role
+            new java.sql.Date(new Date().getTime()),
+            password
+        );
 
         try {
+            userService.saveUser(newUser);
+            System.out.println("Signup OK for: " + email + " (" + firstName + " " + lastName + ")");
+
+            // Load login page
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/login.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) signupButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Login");
             stage.show();
-        } catch (IOException ex) {
+        } catch (SQLException | IOException ex) {
             ex.printStackTrace();
-            showError("Could not open login page after signup.");
+            showError("Failed to signup user: " + ex.getMessage());
         }
     }
 
@@ -97,7 +123,6 @@ public class SignupController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/login.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) goToLoginButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Login");
@@ -110,7 +135,7 @@ public class SignupController implements Initializable {
 
     private void showError(String message) {
         errorLabel.setText(message);
-        errorLabel.setStyle("-fx-text-fill: #b00020;"); 
+        errorLabel.setStyle("-fx-text-fill: #b00020;");
         errorLabel.setVisible(true);
         errorLabel.setManaged(true);
     }

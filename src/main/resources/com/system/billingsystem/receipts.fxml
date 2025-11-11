@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.system.billingsystem.controller.ReceiptsController"
+      spacing="16" style="-fx-padding: 24; -fx-background-color: #f8f9fa;"
+      prefWidth="1200" prefHeight="700">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label text="Receipts History" styleClass="header-title">
+            <font>
+                <Font name="System Bold" size="24"/>
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="refreshButton" text="Refresh" styleClass="action-button"/>
+    </HBox>
+
+    <!-- Search Section -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Search:" styleClass="search-label"/>
+        <TextField fx:id="searchField" promptText="Search by receipt ID, sale ID, customer, or payment method..."
+                  prefWidth="400" styleClass="search-field"/>
+        <Button fx:id="searchButton" text="Search" styleClass="search-button"/>
+        <Button fx:id="clearSearchButton" text="Clear" styleClass="clear-button"/>
+    </HBox>
+
+    <!-- Receipts Table -->
+    <VBox VBox.vgrow="ALWAYS" spacing="8">
+        <Label text="All Issued Receipts" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="16"/>
+            </font>
+        </Label>
+
+        <TableView fx:id="receiptsTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+            <columns>
+                <TableColumn fx:id="colReceiptId" text="Receipt ID" prefWidth="120"/>
+                <TableColumn fx:id="colSaleId" text="Sale ID" prefWidth="100"/>
+                <TableColumn fx:id="colCustomerId" text="Customer ID" prefWidth="120"/>
+                <TableColumn fx:id="colAmountPaid" text="Amount Paid" prefWidth="120"/>
+                <TableColumn fx:id="colPaymentMethod" text="Payment Method" prefWidth="130"/>
+                <TableColumn fx:id="colIssuedAt" text="Issued At" prefWidth="150"/>
+                <TableColumn fx:id="colNotes" text="Notes" prefWidth="200"/>
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+    <!-- Footer -->
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Label text="Total Receipts:" styleClass="footer-label"/>
+        <Label fx:id="totalReceiptsLabel" text="0" styleClass="footer-value"/>
+    </HBox>
+
+</VBox>

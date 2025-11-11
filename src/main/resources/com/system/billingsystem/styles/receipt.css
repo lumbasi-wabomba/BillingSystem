@@ -1,0 +1,90 @@
+/* Receipt Styles */
+
+.receipt-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.receipt-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7f8c8d;
+}
+
+.receipt-section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+    -fx-padding: 8 0 4 0;
+}
+
+.receipt-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #555;
+    -fx-font-weight: 600;
+}
+
+.receipt-value {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2c3e50;
+}
+
+.receipt-total-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.receipt-total-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #27ae60;
+}
+
+.receipt-footer {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7f8c8d;
+    -fx-font-style: italic;
+}
+
+.receipt-notes {
+    -fx-font-size: 11px;
+    -fx-text-fill: #95a5a6;
+}
+
+.receipt-table {
+    -fx-background-color: transparent;
+}
+
+.receipt-table .table-view {
+    -fx-background-color: white;
+}
+
+.receipt-table .table-cell {
+    -fx-font-size: 11px;
+    -fx-padding: 4;
+}
+
+.receipt-table .column-header {
+    -fx-background-color: #ecf0f1;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+/* Print-friendly styles */
+@media print {
+    .button {
+        -fx-display: none;
+    }
+}
+
+/* Separator styling */
+.separator {
+    -fx-padding: 4 0;
+}
+
+.separator .line {
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-style: dashed;
+}

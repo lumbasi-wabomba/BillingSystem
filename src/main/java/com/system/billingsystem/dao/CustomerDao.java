@@ -1,130 +1,113 @@
 package com.system.billingsystem.dao;
 
 import com.system.billingsystem.models.Customers;
-import com.system.billingsystem.models.User;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDao implements Dao<Customers> {
 
-    //gets customer by email
-    public String getCustomerIdByEmail(String email) throws SQLException {
-        String sqlGetCustomerId = "SELECT customers_customerid, customers_email FROM customers WHERE customers_email=?";
-        try (Connection myConnection = DatabaseConnection.getConnection()) {
-            PreparedStatement statementGetCustomerId = myConnection.prepareStatement(sqlGetCustomerId);
-            statementGetCustomerId.setString(1, email);
-            ResultSet resultSet = statementGetCustomerId.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getString("customers_email");
-            } else {
-                return null;
+    @Override
+    public Customers get(Customers customer) throws SQLException {
+        String sql = "SELECT * FROM customers WHERE email = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, customer.getEmail());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Customers(
+                        rs.getString("customer_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("phone_number"),
+                        rs.getTimestamp("created_at"),
+                        rs.getString("notes")
+                );
             }
-        } catch (SQLException e) {
-            throw new SQLException("Error fetching customer by email: " + email, e);
+            return null;
         }
     }
 
-    //gets all customer details after passing to the DB the customer email
-    @Override
-    public Customers get(Customers customers) throws SQLException {
-        String sqlGet = "SELECT * FROM customers WHERE customers_email=?";
-            try(Connection myConnection = DatabaseConnection.getConnection()){
-                PreparedStatement statementGet = myConnection.prepareStatement(sqlGet);
-
-                statementGet.setString(1, customers.getEmail());
-                ResultSet customerDetails = statementGet.executeQuery();
-
-                while (customerDetails.next()){
-                    Customers foundDetails = new Customers(
-                            customerDetails.getString("customers_customerid"),
-                            customerDetails.getString("customers_firstname"),
-                            customerDetails.getString("customers_lastname"),
-                            customerDetails.getString("customers_email"),
-                            customerDetails.getString("customers_phonenumber"),
-                            customerDetails.getDate("customers_date")
-                    );
-                    return foundDetails;
-                }
-                return null;
-            } catch (Exception e) {
-                throw new SQLException("failed to fetch user", e);
-            }
-    }
-
-
-    //get all customers from the DB
     @Override
     public List<Customers> getAll() throws SQLException {
-        String sqlGetAll = "SELECT * FROM customers";
-        List<Customers> customers = new ArrayList<>();
-        try(Connection myConnection = DatabaseConnection.getConnection()){
-            PreparedStatement statementGetAll = myConnection.prepareStatement(sqlGetAll);
-            ResultSet allCustomers = statementGetAll.executeQuery();
-            while (allCustomers.next()){
-                customers.add(new Customers(
-                        allCustomers.getString("customers_customerid"),
-                        allCustomers.getString("customers_firstname"),
-                        allCustomers.getString("customers_lastname"),
-                        allCustomers.getString("customers_email"),
-                        allCustomers.getString("customers_phonenumber"),
-                        allCustomers.getDate("customers_date")
+        String sql = "SELECT * FROM customers";
+        List<Customers> list = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new Customers(
+                        rs.getString("customer_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("phone_number"),
+                        rs.getTimestamp("created_at"),
+                        rs.getString("notes")
                 ));
             }
-            return customers;
-        } catch (Exception e) {
-            throw new SQLException("error while fetching customers", e);
+            return list;
         }
     }
 
-    //save customer to the DB
     @Override
-    public Customers save(Customers customers) throws SQLException {
-        String sqlSave = "INSERT INTO customers (customers_customerid,customers_firstname,customers_lastname,customers_email,customers_phonenumber,customers_date) VALUES (?,?,?,?,?,?) ";
-        try(Connection myConnection = DatabaseConnection.getConnection()){
-            PreparedStatement statementSave = myConnection.prepareStatement(sqlSave);
-            statementSave.setString(1, customers.getCustomerId());
-            statementSave.setString(2, customers.getName());
-            statementSave.setString(3, customers.getEmail());
-            statementSave.setString(4, customers.getPhoneNumber());
-            statementSave.setDate(5, (Date) customers.getDate());
-            statementSave.executeUpdate();
-            return customers;
-        } catch (SQLException e) {
-            throw new SQLException("Error saving user: " + customers.getCustomerId(), e);
+    public Customers save(Customers customer) throws SQLException {
+        String sql = "INSERT INTO customers (customer_id, first_name, last_name, email, phone_number, created_at, notes) VALUES (?,?,?,?,?,?,?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, customer.getCustomerId());
+            stmt.setString(2, customer.getFirstName());
+            stmt.setString(3, customer.getLastName());
+            stmt.setString(4, customer.getEmail());
+            stmt.setString(5, customer.getPhoneNumber());
+            stmt.setTimestamp(6, new Timestamp(customer.getDate().getTime()));
+            stmt.setString(7, customer.getNotes());
+            stmt.executeUpdate();
+            return customer;
         }
     }
 
-    //update customer details in the DB
     @Override
-    public Customers update(Customers customers, String[] params) throws SQLException {
-        String sqlUpdate = "UPDATE customers SET customers_firstname = ?, customers_lastname = ?, customers_email = ?, customers_phonenumber = ?, customers_date = ? WHERE customer_email = ? ";
-        try(Connection myConnection = DatabaseConnection.getConnection()){
-            PreparedStatement statementUpdate = myConnection.prepareStatement(sqlUpdate);
-            statementUpdate.setString(1, params[0]);
-            statementUpdate.setString(2, params[1]);
-            statementUpdate.setString(3, params[2]);
-            statementUpdate.setString(4, params[3]);
-            statementUpdate.setDate(5, Date.valueOf(params[4]));
-            statementUpdate.executeUpdate();
-        }catch (Exception e) {
-            throw new SQLException("Error while updating", e);
+    public Customers update(Customers customer, String[] params) throws SQLException {
+        String sql = "UPDATE customers SET first_name=?, last_name=?, email=?, phone_number=?, notes=? WHERE customer_id=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, params[0]);
+            stmt.setString(2, params[1]);
+            stmt.setString(3, params[2]);
+            stmt.setString(4, params[3]);
+            stmt.setString(5, params[4]);
+            stmt.setString(6, customer.getCustomerId());
+            stmt.executeUpdate();
+            return get(customer);
         }
-        return null;
     }
 
-    //delete customer from the DB
+    public String getLastCustomerId() throws SQLException {
+    String sql = "SELECT customer_id FROM customers ORDER BY customer_id DESC LIMIT 1";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+            return rs.getString("customer_id");
+        }
+        return null; // No customers yet
+    }
+}
+
+
     @Override
     public Customers delete(String id) throws SQLException {
-        String  sqlDelete = "DELETE FROM customers WHERE customers_customerid = ?";
-        try(Connection myConnection  = DatabaseConnection.getConnection()){
-            PreparedStatement statementDelete = myConnection.prepareStatement(sqlDelete);
-            statementDelete.setString(1, id);
-            statementDelete.executeUpdate();
-        } catch (Exception e) {
-            throw  new SQLException("error while deleting the user", e);
+        String sql = "DELETE FROM customers WHERE customer_id=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, id);
+            stmt.executeUpdate();
+            return null;
         }
-        return null;
     }
+
+
 }

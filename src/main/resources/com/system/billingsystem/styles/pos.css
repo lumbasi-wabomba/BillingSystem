@@ -1,0 +1,67 @@
+/* pos.css — POS specific styling (kept next to dashboard.css) */
+
+/* Base card used across app */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(2,6,23,0.06), 8, 0, 0, 2);
+}
+
+/* POS-specific panel tweaks */
+.pos-panel {
+    -fx-padding: 12;
+    -fx-min-height: 200;
+}
+
+/* Title in header for POS */
+.pos-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+
+/* Muted text consistent with dashboard */
+.muted {
+    -fx-text-fill: #6b7280;
+}
+
+/* Table/cart styling */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Improve TableView row padding (affects cells) */
+.table-row-cell {
+    -fx-padding: 6 8 6 8;
+}
+
+/* Totals */
+.total-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+.total-value {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+
+/* Product list cells */
+.list-cell {
+    -fx-padding: 10;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+/* Buttons — subtle, matching dashboard look */
+.button {
+    -fx-background-radius: 8;
+    -fx-padding: 8 12 8 12;
+}
+
+/* Compact mode (toggle this by adding "compact" to the root Pane's styleClass from controller) */
+.compact .card { -fx-padding: 8; }
+.compact .pos-title { -fx-font-size: 16px; }

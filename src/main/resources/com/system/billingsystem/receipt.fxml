@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.system.billingsystem.controller.ReceiptController"
+      stylesheets="@styles/receipt.css"
+      spacing="16" style="-fx-padding: 24; -fx-background-color: white;"
+      prefWidth="400" prefHeight="600" fx:id="receiptRoot">
+
+    <!-- Header -->
+    <VBox alignment="CENTER" spacing="4">
+        <Label text="BILLING SYSTEM" styleClass="receipt-title">
+            <font>
+                <Font name="System Bold" size="20"/>
+            </font>
+        </Label>
+        <Label text="Point of Sale Receipt" styleClass="receipt-subtitle"/>
+        <Separator/>
+    </VBox>
+
+    <!-- Sale Information -->
+    <GridPane hgap="8" vgap="6">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+        
+        <Label text="Receipt #:" styleClass="receipt-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <Label fx:id="saleIdLabel" text="-" styleClass="receipt-value" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        
+        <Label text="Date:" styleClass="receipt-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="dateLabel" text="-" styleClass="receipt-value" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        
+        <Label text="Customer:" styleClass="receipt-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <Label fx:id="customerLabel" text="-" styleClass="receipt-value" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        
+        <Label text="Cashier:" styleClass="receipt-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <Label fx:id="cashierLabel" text="-" styleClass="receipt-value" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Separator/>
+
+    <!-- Items Table -->
+    <VBox VBox.vgrow="ALWAYS">
+        <Label text="Items" styleClass="receipt-section-title">
+            <font>
+                <Font name="System Bold" size="14"/>
+            </font>
+        </Label>
+        
+        <TableView fx:id="itemsTable" VBox.vgrow="ALWAYS" styleClass="receipt-table">
+            <columns>
+                <TableColumn fx:id="colProduct" text="Product" prefWidth="180"/>
+                <TableColumn fx:id="colQty" text="Qty" prefWidth="50"/>
+                <TableColumn fx:id="colPrice" text="Price" prefWidth="70"/>
+                <TableColumn fx:id="colTotal" text="Total" prefWidth="80"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Totals -->
+    <GridPane hgap="8" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="40" halignment="RIGHT"/>
+        </columnConstraints>
+        
+        <Label text="Subtotal:" styleClass="receipt-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <Label fx:id="subtotalLabel" text="KSH 0.00" styleClass="receipt-value" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        
+        <Label text="Discount:" styleClass="receipt-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="discountLabel" text="KSH 0.00" styleClass="receipt-value" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        
+        <Label text="Tax (16%):" styleClass="receipt-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <Label fx:id="taxLabel" text="KSH 0.00" styleClass="receipt-value" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        
+        <Separator GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+        
+        <Label text="TOTAL:" styleClass="receipt-total-label" GridPane.rowIndex="4" GridPane.columnIndex="0">
+            <font>
+                <Font name="System Bold" size="16"/>
+            </font>
+        </Label>
+        <Label fx:id="totalLabel" text="KSH 0.00" styleClass="receipt-total-value" GridPane.rowIndex="4" GridPane.columnIndex="1">
+            <font>
+                <Font name="System Bold" size="16"/>
+            </font>
+        </Label>
+        
+        <Label text="Payment Method:" styleClass="receipt-label" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <Label fx:id="paymentMethodLabel" text="-" styleClass="receipt-value" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <Label text="Amount Paid:" styleClass="receipt-label" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <Label fx:id="paidAmountLabel" text="KSH 0.00" styleClass="receipt-value" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+        <Label text="Balance Due:" styleClass="receipt-label" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+        <Label fx:id="balanceLabel" text="KSH 0.00" styleClass="receipt-value" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Separator/>
+
+    <!-- Footer -->
+    <VBox alignment="CENTER" spacing="8">
+        <Label text="Thank you for your business!" styleClass="receipt-footer"/>
+        <Label fx:id="notesLabel" text="" styleClass="receipt-notes" wrapText="true"/>
+        
+        <!-- Action Buttons -->
+        <HBox spacing="8" alignment="CENTER">
+            <Button fx:id="printBtn" text="Print" prefWidth="100"/>
+            <Button fx:id="closeBtn" text="Close" prefWidth="100"/>
+        </HBox>
+    </VBox>
+
+</VBox>

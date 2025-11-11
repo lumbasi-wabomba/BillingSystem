@@ -1,19 +1,20 @@
 package com.system.billingsystem.controller;
 
+import com.system.billingsystem.models.Products;
+import com.system.billingsystem.service.ProductsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-//import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class InventoryController {
@@ -24,133 +25,145 @@ public class InventoryController {
     @FXML private Label categoriesValue;
 
     @FXML private TextField searchField;
-    @FXML private TableView<Product> productTable;
-    @FXML private TableColumn<Product, String> colName;
-    @FXML private TableColumn<Product, String> colCode;
-    @FXML private TableColumn<Product, String> colCategory;
-    @FXML private TableColumn<Product, Integer> colStock;
-    @FXML private TableColumn<Product, String> colStatus;
-    @FXML private TableColumn<Product, Double> colPrice;
-    @FXML private TableColumn<Product, Void> colActions; // new actions column
+    @FXML private TableView<Products> productTable;
+    @FXML private TableColumn<Products, String> colName;
+    @FXML private TableColumn<Products, String> colCode;
+    @FXML private TableColumn<Products, String> colCategory;
+    @FXML private TableColumn<Products, Integer> colStock;
+    @FXML private TableColumn<Products, String> colStatus;
+    @FXML private TableColumn<Products, Double> colPrice;
+    @FXML private TableColumn<Products, Void> colActions;
 
     @FXML private Button addProductButton;
+    @FXML private Button searchButton; // ensure FXML has this id
 
-    private ObservableList<Product> inventory = FXCollections.observableArrayList();
+    private final ObservableList<Products> inventory = FXCollections.observableArrayList();
+    private final ProductsService productsService = new ProductsService();
 
     @FXML
     public void initialize() {
-        // Demo data
-        inventory.addAll(
-            new Product("Apple", "A001", "Fruit", 50, 10, 5),
-            new Product("Banana", "B002", "Fruit", 30, 3, 5),
-            new Product("Carrot", "C003", "Vegetable", 20, 15, 5)
-        );
+        loadProductsFromDB();
 
         productTable.setItems(inventory);
 
         // Setup columns
-        colName.setCellValueFactory(data -> data.getValue().nameProperty());
-        colCode.setCellValueFactory(data -> data.getValue().codeProperty());
-        colCategory.setCellValueFactory(data -> data.getValue().categoryProperty());
-        colStock.setCellValueFactory(data -> data.getValue().quantityProperty().asObject());
-        colPrice.setCellValueFactory(data -> data.getValue().priceProperty().asObject());
-        colStatus.setCellValueFactory(data -> data.getValue().statusProperty());
+        colName.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getProductName()));
+        colCode.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getProductCode()));
+        colCategory.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCategory()));
+        colStock.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getQuantity()).asObject());
+        colPrice.setCellValueFactory(data -> new javafx.beans.property.SimpleDoubleProperty(data.getValue().getPrice()).asObject());
+        colStatus.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
+                data.getValue().getQuantity() <= data.getValue().getReorderLevel() ? "LOW" : "OK"
+        ));
 
-        // Actions column: view, edit, delete
-        colActions.setCellFactory(new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+        setupActionsColumn();
+        updateSummary();
+
+        addProductButton.setOnMouseClicked(this::handleAddProduct);
+
+        if (searchButton != null) {
+            searchButton.setOnAction(e -> performSearch());
+        }
+
+        // Enter key in search field
+        if (searchField != null) {
+            searchField.setOnAction(e -> performSearch());
+        }
+    }
+
+    private void loadProductsFromDB() {
+        try {
+            List<Products> products = productsService.getAllProducts();
+            inventory.setAll(products);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+        }
+    }
+
+    private void setupActionsColumn() {
+        colActions.setCellFactory(new Callback<>() {
             @Override
-            public TableCell<Product, Void> call(TableColumn<Product, Void> param) {
+            public TableCell<Products, Void> call(TableColumn<Products, Void> param) {
                 return new TableCell<>() {
                     private final Button viewBtn = new Button("View");
                     private final Button editBtn = new Button("Edit");
-                    private final Button delBtn = new Button("Delete");
-                    private final HBox box = new HBox(8, viewBtn, editBtn, delBtn);
+                    // private final Button delBtn = new Button("Delete");
+                    private final HBox box = new HBox(8, viewBtn, editBtn /*, delBtn*/);
 
                     {
-                        viewBtn.setOnAction(evt -> {
-                            Product p = getTableView().getItems().get(getIndex());
-                            showProductDialog(p, false);
-                        });
+                        box.setPadding(new Insets(5));
+                    }
 
-                        editBtn.setOnAction(evt -> {
-                            Product p = getTableView().getItems().get(getIndex());
-                            showProductDialog(p, true);
-                        });
+                    {
+                        viewBtn.setOnAction(evt -> showProductDialog(getCurrentProduct(), false));
+                        editBtn.setOnAction(evt -> showProductDialog(getCurrentProduct(), true));
+                        // delBtn.setOnAction(evt -> handleDeleteProduct(getCurrentProduct()));
+                    }
 
-                        delBtn.setOnAction(evt -> {
-                            Product p = getTableView().getItems().get(getIndex());
-                            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                            confirm.setTitle("Confirm Delete");
-                            confirm.setHeaderText(null);
-                            confirm.setContentText("Delete product \"" + p.nameProperty().get() + "\"?");
-                            Optional<ButtonType> res = confirm.showAndWait();
-                            if (res.isPresent() && res.get() == ButtonType.OK) {
-                                inventory.remove(p);
-                                updateSummary();
-                            }
-                        });
+                    private Products getCurrentProduct() {
+                        return getTableView().getItems().get(getIndex());
                     }
 
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(box);
-                        }
+                        setGraphic(empty ? null : box);
                     }
                 };
             }
         });
-
-        updateSummary();
-
-        addProductButton.setOnMouseClicked(this::handleAddProduct);
     }
 
-    private void updateSummary() {
-        totalProductsValue.setText(String.valueOf(inventory.size()));
-        long lowStockCount = inventory.stream().filter(p -> p.getQuantity() <= p.getReorderLevel()).count();
-        lowStockValue.setText(String.valueOf(lowStockCount));
-        double totalValue = inventory.stream().mapToDouble(p -> p.getPrice() * p.getQuantity()).sum();
-        totalValueLabel.setText("KSH " + (int)totalValue);
-        long categoriesCount = inventory.stream().map(Product::getCategory).distinct().count();
-        categoriesValue.setText(String.valueOf(categoriesCount));
+    private void handleDeleteProduct(Products product) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Delete product \"" + product.getProductName() + "\"?", ButtonType.OK, ButtonType.CANCEL);
+        confirm.setHeaderText(null);
+        Optional<ButtonType> res = confirm.showAndWait();
+        if (res.isPresent() && res.get() == ButtonType.OK) {
+            try {
+                productsService.deleteProduct(product.getProductCode());
+                inventory.remove(product);
+                updateSummary();
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Delete Error", e.getMessage());
+            }
+        }
     }
 
     private void handleAddProduct(MouseEvent e) {
-        inventory.add(new Product("Demo Product", "D004", "Demo", 100, 10, 5));
-        updateSummary();
+        Products newProduct = new Products();
+        newProduct.setProductName("New Product");
+        newProduct.setProductCode("NEW" + System.currentTimeMillis()); // ensure unique code
+        newProduct.setCategory("Demo");
+        newProduct.setPrice(0.0);
+        newProduct.setQuantity(0);
+        newProduct.setReorderLevel(5);
+
+        try {
+            Products saved = productsService.save(newProduct); // product_id will be generated in DAO if missing
+            inventory.add(saved);
+            updateSummary();
+        } catch (SQLException ex) {
+            showAlert(Alert.AlertType.ERROR, "Add Product Error", ex.getMessage());
+        }
     }
 
-    private void showProductDialog(Product p, boolean editable) {
+    private void showProductDialog(Products p, boolean editable) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle(editable ? "Edit Product" : "View Product");
         ButtonType saveType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-
         if (editable) dialog.getDialogPane().getButtonTypes().addAll(saveType, ButtonType.CANCEL);
-        else dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+        else dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
 
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20));
+        grid.setHgap(10); grid.setVgap(10); grid.setPadding(new Insets(20));
 
-        // Fields
-        TextField nameField = new TextField(p.nameProperty().get());
-        TextField codeField = new TextField(p.codeProperty().get());
-        TextField categoryField = new TextField(p.categoryProperty().get());
+        TextField nameField = new TextField(p.getProductName());
+        TextField codeField = new TextField(p.getProductCode());
+        TextField categoryField = new TextField(p.getCategory() == null ? "" : p.getCategory());
         TextField qtyField = new TextField(String.valueOf(p.getQuantity()));
         TextField reorderField = new TextField(String.valueOf(p.getReorderLevel()));
         TextField priceField = new TextField(String.valueOf(p.getPrice()));
 
-        // Timestamps - read-only labels
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        Label createdLabel = new Label(p.getCreatedAt().format(fmt));
-        Label updatedLabel = new Label(p.getUpdatedAt().format(fmt));
-
-        // Disable editing if not editable
         nameField.setEditable(editable);
         codeField.setEditable(editable);
         categoryField.setEditable(editable);
@@ -158,131 +171,80 @@ public class InventoryController {
         reorderField.setEditable(editable);
         priceField.setEditable(editable);
 
-        grid.add(new Label("Name:"), 0, 0);
-        grid.add(nameField, 1, 0);
-
-        grid.add(new Label("Code:"), 0, 1);
-        grid.add(codeField, 1, 1);
-
-        grid.add(new Label("Category:"), 0, 2);
-        grid.add(categoryField, 1, 2);
-
-        grid.add(new Label("Quantity:"), 0, 3);
-        grid.add(qtyField, 1, 3);
-
-        grid.add(new Label("Reorder Level:"), 0, 4);
-        grid.add(reorderField, 1, 4);
-
-        grid.add(new Label("Price:"), 0, 5);
-        grid.add(priceField, 1, 5);
-
-        grid.add(new Label("Created At:"), 0, 6);
-        grid.add(createdLabel, 1, 6);
-
-        grid.add(new Label("Updated At:"), 0, 7);
-        grid.add(updatedLabel, 1, 7);
+        grid.add(new Label("Name:"), 0, 0); grid.add(nameField, 1, 0);
+        grid.add(new Label("Code:"), 0, 1); grid.add(codeField, 1, 1);
+        grid.add(new Label("Category:"), 0, 2); grid.add(categoryField, 1, 2);
+        grid.add(new Label("Quantity:"), 0, 3); grid.add(qtyField, 1, 3);
+        grid.add(new Label("Reorder Level:"), 0, 4); grid.add(reorderField, 1, 4);
+        grid.add(new Label("Price:"), 0, 5); grid.add(priceField, 1, 5);
 
         dialog.getDialogPane().setContent(grid);
 
-        // Validation / Save handler
         Node saveButton = dialog.getDialogPane().lookupButton(saveType);
-        if (saveButton != null) {
-            saveButton.setDisable(false); // could add validation
-        }
+        if (saveButton != null) saveButton.setDisable(false);
 
         Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == saveType) {
-            // apply updates
+        if (editable && result.isPresent() && result.get() == saveType) {
             try {
-                p.nameProperty().set(nameField.getText());
-                p.codeProperty().set(codeField.getText());
-                p.categoryProperty().set(categoryField.getText());
+                p.setProductName(nameField.getText());
+                p.setProductCode(codeField.getText());
+                p.setCategory(categoryField.getText());
+                p.setQuantity(Integer.parseInt(qtyField.getText().trim()));
+                p.setReorderLevel(Integer.parseInt(reorderField.getText().trim()));
+                p.setPrice(Double.parseDouble(priceField.getText().trim()));
 
-                int newQty = Integer.parseInt(qtyField.getText().trim());
-                int newReorder = Integer.parseInt(reorderField.getText().trim());
-                double newPrice = Double.parseDouble(priceField.getText().trim());
+                productsService.updateProduct(p, new String[]{
+                        p.getProductName(),
+                        p.getProductCode(),
+                        String.valueOf(p.getPrice()),
+                        String.valueOf(p.getQuantity()),
+                        p.getCategory(),
+                        String.valueOf(p.getReorderLevel())
+                });
 
-                p.quantityProperty().set(newQty);
-                p.reorderLevelProperty().set(newReorder);
-                p.priceProperty().set(newPrice);
-
-                p.updatedAtProperty().set(LocalDateTime.now());
-
-                // Refresh UI
+                // reload row from DB (optional) — here we just refresh table
                 productTable.refresh();
                 updateSummary();
+            } catch (SQLException ex) {
+                showAlert(Alert.AlertType.ERROR, "Update Error", ex.getMessage());
             } catch (NumberFormatException ex) {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Please enter valid numeric values for quantity, reorder level, and price.", ButtonType.OK);
-                a.setHeaderText(null);
-                a.showAndWait();
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Quantity, Reorder Level and Price must be numbers.");
             }
         }
     }
 
-    // Product class (inner)
-    public static class Product {
-        private final javafx.beans.property.SimpleStringProperty name;
-        private final javafx.beans.property.SimpleStringProperty code;
-        private final javafx.beans.property.SimpleStringProperty category;
-        private final javafx.beans.property.SimpleIntegerProperty quantity;
-        private final javafx.beans.property.SimpleIntegerProperty reorderLevel;
-        private final javafx.beans.property.SimpleDoubleProperty price;
-        private final javafx.beans.property.SimpleStringProperty status;
+    private void updateSummary() {
+        totalProductsValue.setText(String.valueOf(inventory.size()));
+        long lowStockCount = inventory.stream().filter(p -> p.getQuantity() <= p.getReorderLevel()).count();
+        lowStockValue.setText(String.valueOf(lowStockCount));
+        double totalValue = inventory.stream().mapToDouble(p -> p.getPrice() * p.getQuantity()).sum();
+        totalValueLabel.setText("KSH " + (int) totalValue);
+        long categoriesCount = inventory.stream().map(Products::getCategory).distinct().count();
+        categoriesValue.setText(String.valueOf(categoriesCount));
+    }
 
-        private final javafx.beans.property.ObjectProperty<LocalDateTime> createdAt;
-        private final javafx.beans.property.ObjectProperty<LocalDateTime> updatedAt;
-
-        public Product(String name, String code, String category, int quantity, int reorderLevel, double price) {
-            this.name = new javafx.beans.property.SimpleStringProperty(name);
-            this.code = new javafx.beans.property.SimpleStringProperty(code);
-            this.category = new javafx.beans.property.SimpleStringProperty(category);
-            this.quantity = new javafx.beans.property.SimpleIntegerProperty(quantity);
-            this.reorderLevel = new javafx.beans.property.SimpleIntegerProperty(reorderLevel);
-            this.price = new javafx.beans.property.SimpleDoubleProperty(price);
-            this.status = new javafx.beans.property.SimpleStringProperty(computeStatus(quantity, reorderLevel));
-
-            LocalDateTime now = LocalDateTime.now();
-            this.createdAt = new javafx.beans.property.SimpleObjectProperty<>(now);
-            this.updatedAt = new javafx.beans.property.SimpleObjectProperty<>(now);
-
-            // listen to quantity changes to update status and updatedAt
-            this.quantity.addListener((obs, oldV, newV) -> {
-                status.set(computeStatus(newV.intValue(), this.reorderLevel.get()));
-                this.updatedAt.set(LocalDateTime.now());
-            });
-
-            // listen to reorder changes to update status
-            this.reorderLevel.addListener((obs, oldV, newV) -> {
-                status.set(computeStatus(this.quantity.get(), newV.intValue()));
-                this.updatedAt.set(LocalDateTime.now());
-            });
-
-            // listen to price/name/category changes to bump updatedAt
-            this.price.addListener((obs, o, n) -> this.updatedAt.set(LocalDateTime.now()));
-            this.name.addListener((obs, o, n) -> this.updatedAt.set(LocalDateTime.now()));
-            this.code.addListener((obs, o, n) -> this.updatedAt.set(LocalDateTime.now()));
-            this.category.addListener((obs, o, n) -> this.updatedAt.set(LocalDateTime.now()));
+    private void performSearch() {
+        String searchText = searchField.getText();
+        if (searchText == null || searchText.trim().isEmpty()) {
+            productTable.setItems(inventory);
+            return;
         }
+        String s = searchText.toLowerCase().trim();
+        ObservableList<Products> filtered = FXCollections.observableArrayList();
+        for (Products p : inventory) {
+            if ((p.getProductName() != null && p.getProductName().toLowerCase().contains(s)) ||
+                (p.getProductCode() != null && p.getProductCode().toLowerCase().contains(s)) ||
+                (p.getCategory() != null && p.getCategory().toLowerCase().contains(s))) {
+                filtered.add(p);
+            }
+        }
+        productTable.setItems(filtered);
+    }
 
-        private String computeStatus(int qty, int reorder) { return qty <= reorder ? "LOW" : "OK"; }
-
-        public javafx.beans.property.StringProperty nameProperty() { return name; }
-        public javafx.beans.property.StringProperty codeProperty() { return code; }
-        public javafx.beans.property.StringProperty categoryProperty() { return category; }
-        public javafx.beans.property.IntegerProperty quantityProperty() { return quantity; }
-        public javafx.beans.property.IntegerProperty reorderLevelProperty() { return reorderLevel; }
-        public javafx.beans.property.DoubleProperty priceProperty() { return price; }
-        public javafx.beans.property.StringProperty statusProperty() { return status; }
-
-        public javafx.beans.property.ObjectProperty<LocalDateTime> createdAtProperty() { return createdAt; }
-        public javafx.beans.property.ObjectProperty<LocalDateTime> updatedAtProperty() { return updatedAt; }
-
-        public int getQuantity() { return quantity.get(); }
-        public int getReorderLevel() { return reorderLevel.get(); }
-        public double getPrice() { return price.get(); }
-        public String getCategory() { return category.get(); }
-
-        public LocalDateTime getCreatedAt() { return createdAt.get(); }
-        public LocalDateTime getUpdatedAt() { return updatedAt.get(); }
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert a = new Alert(type, message, ButtonType.OK);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.showAndWait();
     }
 }

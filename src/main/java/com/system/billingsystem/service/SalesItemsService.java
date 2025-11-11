@@ -49,4 +49,13 @@ public class SalesItemsService {
             throw new SQLException("Error: "+ e.getMessage(), e);
         }
     }
+
+    // Get items by sale ID
+    public List<SalesItems> getItemsBySaleId(String saleId) throws SQLException {
+        try {
+            return salesItemsDao.getItemsBySaleId(saleId);
+        } catch (Exception e) {
+            throw new SQLException("Error: " + e.getMessage(), e);
+        }
+    }
 }

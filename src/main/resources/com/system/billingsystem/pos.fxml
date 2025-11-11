@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.system.billingsystem.controller.PosController"
+            stylesheets="@styles/pos.css"
+            prefWidth="1200.0" prefHeight="800.0">
+
+    <!-- Top header -->
+    <HBox spacing="12.0" AnchorPane.topAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0">
+        <Label text="Point of Sale" styleClass="pos-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Main content -->
+    <HBox spacing="12.0" AnchorPane.topAnchor="60.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.bottomAnchor="8.0">
+
+        <!-- LEFT: Product search, category and list -->
+        <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="360.0">
+            <HBox spacing="8">
+                <TextField fx:id="prodSearch" promptText="Search product by name or code" HBox.hgrow="ALWAYS"/>
+                <ChoiceBox fx:id="categoryFilter" prefWidth="120.0"/>
+            </HBox>
+            <ListView fx:id="productList" prefHeight="640.0" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <!-- CENTER: Cart -->
+        <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="420.0">
+            <Label text="Cart" styleClass="muted"/>
+            <TableView fx:id="cartTable" prefHeight="520.0" VBox.vgrow="ALWAYS" editable="true">
+                <columns>
+                    <TableColumn fx:id="colProd" text="Product" prefWidth="180.0"/>
+                    <TableColumn fx:id="colQty" text="Qty" prefWidth="60.0"/>
+                    <TableColumn fx:id="colUnit" text="Unit" prefWidth="80.0"/>
+                    <TableColumn fx:id="colLine" text="Line Total" prefWidth="100.0"/>
+                    <TableColumn fx:id="colRemove" text="" prefWidth="80.0"/>
+                </columns>
+            </TableView>
+            <HBox spacing="8" alignment="CENTER_RIGHT">
+                <Label text="Notes:"/>
+                <TextField fx:id="notesField" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+
+        <!-- RIGHT: Customer, payment and recent sales -->
+        <VBox spacing="10" styleClass="card" prefWidth="340.0">
+
+            <Label text="Customer" styleClass="muted"/>
+            <ComboBox fx:id="customerCombo" promptText="Select customer..."/>
+
+            <Separator/>
+
+            <Label text="Totals" styleClass="muted"/>
+            <GridPane hgap="8" vgap="6">
+                <Label text="Subtotal:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="subtotalLabel" text="KSH 0.00" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                
+                <Label text="Discount:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="discountField" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                
+                <Label text="Tax:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="taxLabel" text="KSH 0.00" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                
+                <Label text="Total:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="totalLabel" text="KSH 0.00" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="total-value"/>
+            </GridPane>
+
+            <Separator/>
+
+            <Label text="Payment" styleClass="muted"/>
+
+            <TextField fx:id="paymentAmountField"
+                       promptText="Amount Paid"
+                       prefWidth="200"/>
+
+            <ChoiceBox fx:id="paymentMethod" prefWidth="200.0"/>
+
+            <HBox spacing="8">
+                <Button fx:id="finalizeBtn" text="Finalize Sale" HBox.hgrow="ALWAYS" styleClass="primary-button"/>
+                <Button fx:id="clearBtn" text="Clear Cart" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <Button fx:id="newSaleBtn" text="New Sale" prefWidth="200.0"/>
+
+            <Separator/>
+
+            <Label text="Recent Sales" styleClass="muted"/>
+            <ListView fx:id="recentSalesList" prefHeight="140.0"/>
+
+        </VBox>
+
+    </HBox>
+
+</AnchorPane>

@@ -1,11 +1,11 @@
 package com.system.billingsystem.controller;
 
+import com.system.billingsystem.dao.UserDao;
+import com.system.billingsystem.service.UserService;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,111 +14,130 @@ import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
-    @FXML private Button loginButton; 
-    @FXML private Button goToSignupButton; 
+    @FXML private Button loginButton;
+    @FXML private Button goToSignupButton;
     @FXML private Label errorLabel;
     @FXML private Label successLabel;
 
+    private UserService userService;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            userService = new UserService(new UserDao());
+        } catch (Exception e) {
+            showError("Failed to initialize user service: " + e.getMessage());
+        }
+
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
-
         successLabel.setVisible(false);
         successLabel.setManaged(false);
 
-        EventHandler<KeyEvent> enterKeyHandler = e -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                doLogin();
-            }
-        };
-        emailField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
-        passwordField.addEventHandler(KeyEvent.KEY_PRESSED, enterKeyHandler);
+        // Handle Enter key properly
+        emailField.setOnKeyPressed(this::handleEnterKey);
+        passwordField.setOnKeyPressed(this::handleEnterKey);
 
-        loginButton.addEventHandler(ActionEvent.ACTION, (EventHandler<ActionEvent>) e -> doLogin());
+        loginButton.setOnAction(e -> doLogin());
+        goToSignupButton.setOnAction(e -> goToSignup());
+    }
 
-        goToSignupButton.addEventHandler(ActionEvent.ACTION, (EventHandler<ActionEvent>) e -> {
-            javafx.scene.Node source = (javafx.scene.Node) e.getSource();
-            Stage stage = (Stage) source.getScene().getWindow();
-            handleGoToSignup();
-        });
+    // Proper Enter key handler
+    private void handleEnterKey(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            doLogin();
+        }
     }
 
     private void showError(String message) {
-    errorLabel.setText(message);
-    errorLabel.setStyle("-fx-text-fill: #ff002fff;");
-    errorLabel.setVisible(true);
-    errorLabel.setManaged(true);
-}
-
-
+        errorLabel.setText(message);
+        errorLabel.setStyle("-fx-text-fill: #ff002fff;");
+        errorLabel.setVisible(true);
+        errorLabel.setManaged(true);
+    }
 
     private void doLogin() {
         String email = emailField.getText() == null ? "" : emailField.getText().trim();
         String password = passwordField.getText() == null ? "" : passwordField.getText().trim();
 
-        // hide previous messages
-        successLabel.setVisible(false);
-        successLabel.setManaged(false);
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
+        successLabel.setVisible(false);
+        successLabel.setManaged(false);
 
         if (email.isEmpty() || password.isEmpty()) {
             showError("Please enter both email and password.");
             return;
         }
 
-        //auth propaganda
+        try {
+            if (userService.loginUser(email, password)) {
+                successLabel.setText("Login successful!");
+                successLabel.setVisible(true);
+                successLabel.setManaged(true);
+                System.out.println("Login OK");
 
-        if (email.equals("u@e.c") && password.equals("one")) {
-            errorLabel.setVisible(false);
-            errorLabel.setManaged(false);
-
-            successLabel.setText("Login successful!");
-            successLabel.setVisible(true);
-            successLabel.setManaged(true);
-
-            System.out.println("Login OK");
-
-            try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/main.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Dashboard");
-            stage.show();
-        } catch (IOException ex) {
+                openDashboard();
+            } else {
+                showError("Invalid email or password.");
+                System.out.println("Login FAILED: " + email);
+            }
+        } catch (SQLException ex) {
             ex.printStackTrace();
-            showError("Could not open dashboard page after signin.");
-        }
-        } else {
-            showError("Invalid email or password.");
-            System.out.println("Login terribly FAILED, be serious with your life," + email + " !!!!" );
-
+            showError("Login failed: " + ex.getMessage());
         }
     }
 
-
-    private void handleGoToSignup() {
+    private void goToSignup() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/signup.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) goToSignupButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Sign Up");
-            stage.show();
-
+            Stage stage = getStage();
+            if (stage != null) {
+                stage.setScene(new Scene(root));
+                stage.setTitle("Sign Up");
+                stage.show();
+            } else {
+                showError("Stage not found!");
+            }
         } catch (IOException e) {
             e.printStackTrace();
-            showError("Failed to load sign up page.");}
+            showError("Failed to load sign up page.");
+        }
     }
 
+    // Open dashboard after successful login
+    private void openDashboard() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/main.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = getStage();
+            if (stage != null) {
+                stage.setScene(new Scene(root));
+                stage.setTitle("Dashboard");
+                stage.show();
+            } else {
+                showError("Stage not found!");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            showError("Could not open dashboard page.");
+        }
+    }
+
+    // Utility method to get the current Stage
+    private Stage getStage() {
+        if (loginButton.getScene() != null) return (Stage) loginButton.getScene().getWindow();
+        if (goToSignupButton.getScene() != null) return (Stage) goToSignupButton.getScene().getWindow();
+        return null;
+    }
 }

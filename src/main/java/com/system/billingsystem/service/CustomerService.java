@@ -7,50 +7,33 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class CustomerService {
-    private  final CustomerDao customerDao;
+    private final CustomerDao customerDao;
 
-    // Constructor
     public CustomerService(CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
 
-    // Service methods for customer operations
-    public   Customers getCustomer(Customers customer) throws SQLException{
-        try{
-            return customerDao.get(customer);
-        } catch (Exception e) {
-            throw new SQLException("Error: " + e.getMessage(), e );
-        }
-    }
-    public List<Customers> getAllCustomers() throws  SQLException{
-        try{
-            return  customerDao.getAll();
-        } catch (Exception e) {
-            throw new SQLException("Error: "+ e.getMessage(), e);
-        }
-    }
-    public Customers saveCustomer(Customers customer) throws SQLException{
-        try{
-            return customerDao.save(customer);
-        } catch (Exception e) {
-            throw new SQLException("Error: "+ e.getMessage(), e);
-        }
-    }
-    public Customers updateCustomer(Customers customer, String[] details) throws  SQLException{
-        try{
-            return customerDao.update(customer, details);
-        } catch (Exception e) {
-            throw new SQLException("Error: "+ e.getMessage(), e);
-        }
-    }
-    public Customers deleteCustomer(String id) throws  SQLException{
-        try{
-            return customerDao.delete(id);
-        } catch (Exception e) {
-            throw new SQLException("Error: "+ e.getMessage(), e);
-        }
+    public String getLastCustomerId() throws SQLException {
+    return customerDao.getLastCustomerId();
     }
 
+    public Customers getCustomer(Customers customer) throws SQLException {
+        return customerDao.get(customer);
+    }
 
+    public List<Customers> getAllCustomers() throws SQLException {
+        return customerDao.getAll();
+    }
 
+    public Customers saveCustomer(Customers customer) throws SQLException {
+        return customerDao.save(customer);
+    }
+
+    public Customers updateCustomer(Customers customer, String[] details) throws SQLException {
+        return customerDao.update(customer, details);
+    }
+
+    public Customers deleteCustomer(String id) throws SQLException {
+        return customerDao.delete(id);
+    }
 }
