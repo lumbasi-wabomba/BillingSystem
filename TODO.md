@@ -28,3 +28,5 @@
 - [ ] Verify dashboard loads real data
 - [ ] Test POS scenarios: full payment, partial payment, no payment
 - [ ] Check receipt and invoice generation
+
+##
