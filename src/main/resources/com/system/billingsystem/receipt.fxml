@@ -11,7 +11,6 @@
       spacing="16" style="-fx-padding: 24; -fx-background-color: white;"
       prefWidth="400" prefHeight="600" fx:id="receiptRoot">
 
-    <!-- Header -->
     <VBox alignment="CENTER" spacing="4">
         <Label text="BILLING SYSTEM" styleClass="receipt-title">
             <font>
@@ -22,7 +21,6 @@
         <Separator/>
     </VBox>
 
-    <!-- Sale Information -->
     <GridPane hgap="8" vgap="6">
         <columnConstraints>
             <ColumnConstraints percentWidth="40"/>
@@ -44,7 +42,6 @@
 
     <Separator/>
 
-    <!-- Items Table -->
     <VBox VBox.vgrow="ALWAYS">
         <Label text="Items" styleClass="receipt-section-title">
             <font>
@@ -64,7 +61,6 @@
 
     <Separator/>
 
-    <!-- Totals -->
     <GridPane hgap="8" vgap="8">
         <columnConstraints>
             <ColumnConstraints percentWidth="60"/>
@@ -105,12 +101,10 @@
 
     <Separator/>
 
-    <!-- Footer -->
     <VBox alignment="CENTER" spacing="8">
         <Label text="Thank you for your business!" styleClass="receipt-footer"/>
         <Label fx:id="notesLabel" text="" styleClass="receipt-notes" wrapText="true"/>
         
-        <!-- Action Buttons -->
         <HBox spacing="8" alignment="CENTER">
             <Button fx:id="printBtn" text="Print" prefWidth="100"/>
             <Button fx:id="closeBtn" text="Close" prefWidth="100"/>

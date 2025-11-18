@@ -9,16 +9,13 @@
             stylesheets="@styles/pos.css"
             prefWidth="1200.0" prefHeight="800.0">
 
-    <!-- Top header -->
     <HBox spacing="12.0" AnchorPane.topAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0">
         <Label text="Point of Sale" styleClass="pos-title"/>
         <Region HBox.hgrow="ALWAYS"/>
     </HBox>
 
-    <!-- Main content -->
     <HBox spacing="12.0" AnchorPane.topAnchor="60.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.bottomAnchor="8.0">
 
-        <!-- LEFT: Product search, category and list -->
         <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="360.0">
             <HBox spacing="8">
                 <TextField fx:id="prodSearch" promptText="Search product by name or code" HBox.hgrow="ALWAYS"/>
@@ -27,7 +24,6 @@
             <ListView fx:id="productList" prefHeight="640.0" VBox.vgrow="ALWAYS"/>
         </VBox>
 
-        <!-- CENTER: Cart -->
         <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="420.0">
             <Label text="Cart" styleClass="muted"/>
             <TableView fx:id="cartTable" prefHeight="520.0" VBox.vgrow="ALWAYS" editable="true">
@@ -44,8 +40,7 @@
                 <TextField fx:id="notesField" HBox.hgrow="ALWAYS"/>
             </HBox>
         </VBox>
-
-        <!-- RIGHT: Customer, payment and recent sales -->
+        
         <VBox spacing="10" styleClass="card" prefWidth="340.0">
 
             <Label text="Customer" styleClass="muted"/>

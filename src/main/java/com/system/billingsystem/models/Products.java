@@ -20,7 +20,6 @@ public class Products {
     }
     public Products() {}
 
-    // Getters and setters...
     public String getProductId() { return productId; }
     public String getProductName() { return productName; }
     public String getProductCode() { return productCode; }

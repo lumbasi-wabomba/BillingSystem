@@ -44,7 +44,6 @@ public class MainController {
         try {
             URL fxmlUrl = getClass().getResource(fxmlPath);
             if (fxmlUrl == null) {
-                // helpful debug message
                 System.err.println("FXML not found: " + fxmlPath + " — check resource path and that the file is in resources.");
                 return;
             }

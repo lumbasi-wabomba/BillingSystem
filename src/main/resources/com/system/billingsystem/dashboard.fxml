@@ -18,9 +18,6 @@
     <VBox spacing="12.0" AnchorPane.topAnchor="8.0" AnchorPane.leftAnchor="8.0"
           AnchorPane.rightAnchor="8.0" AnchorPane.bottomAnchor="8.0">
 
-     
-
-      <!-- Header Row -->
       <HBox alignment="CENTER_LEFT" spacing="12.0">
         <children>
           <Label text="Dashboard" styleClass="dashboard-title"/>
@@ -29,7 +26,6 @@
         </children>
       </HBox>
 
-      <!-- Centered Stat Cards Row -->
       <HBox spacing="12.0" alignment="CENTER">
         <children>
           <VBox spacing="6" styleClass="card" HBox.hgrow="ALWAYS">
@@ -55,7 +51,6 @@
         </children>
       </HBox>
 
-      <!-- Charts Row -->
       <HBox spacing="12.0" HBox.hgrow="ALWAYS">
         <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
           <Label text="Sales Distribution (Pie)" styleClass="muted"/>
@@ -74,7 +69,6 @@
         </VBox>
       </HBox>
 
-      <!-- Lists Row -->
       <HBox spacing="12.0" HBox.hgrow="ALWAYS">
         <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
           <Label text="Recent Transactions" styleClass="muted"/>
@@ -83,7 +77,6 @@
         <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
           <Label text="Low Stock Alerts" styleClass="muted"/>
           <ListView fx:id="lowStockList" prefHeight="200"/>
-        </VBox>
       </HBox>
 
     </VBox>

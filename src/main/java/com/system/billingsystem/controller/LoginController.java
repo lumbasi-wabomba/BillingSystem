@@ -114,7 +114,6 @@ public class LoginController implements Initializable {
         }
     }
 
-    // Open dashboard after successful login
     private void openDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/system/billingsystem/main.fxml"));
@@ -134,7 +133,6 @@ public class LoginController implements Initializable {
         }
     }
 
-    // Utility method to get the current Stage
     private Stage getStage() {
         if (loginButton.getScene() != null) return (Stage) loginButton.getScene().getWindow();
         if (goToSignupButton.getScene() != null) return (Stage) goToSignupButton.getScene().getWindow();
