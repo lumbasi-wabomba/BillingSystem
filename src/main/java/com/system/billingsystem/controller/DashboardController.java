@@ -56,13 +56,11 @@ public class DashboardController implements Initializable {
             loadDashboardData();
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to demo data if DB fails
             loadDemoData();
         }
     }
 
     private void loadDashboardData() throws SQLException {
-        // Today's sales
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -80,7 +78,6 @@ public class DashboardController implements Initializable {
             .sum();
         todaysSalesValue.setText("KSH " + fmt.format(todaysSales));
 
-        // Items sold today
         List<SalesItems> allItems = salesItemsDao.getAll();
         int itemsSold = allItems.stream()
             .filter(si -> si.getDate().after(todayStart) && si.getDate().before(todayEnd))
@@ -88,7 +85,6 @@ public class DashboardController implements Initializable {
             .sum();
         itemsSoldValue.setText(String.valueOf(itemsSold));
 
-        // Low stock
         List<Products> allProducts = productsDao.getAll();
         List<Products> lowStockProducts = allProducts.stream()
             .filter(p -> p.getQuantity() <= p.getReorderLevel())
@@ -96,14 +92,12 @@ public class DashboardController implements Initializable {
         double lowStockPercent = allProducts.isEmpty() ? 0 : (double) lowStockProducts.size() / allProducts.size() * 100;
         lowStockValue.setText(lowStockProducts.size() + " (" + String.format("%.1f", lowStockPercent) + "%)");
 
-        // Active customers (exclude WALKIN)
         List<Customers> allCustomers = customerDao.getAll();
         long activeCount = allCustomers.stream()
             .filter(c -> !c.getCustomerId().equalsIgnoreCase("WALKIN"))
             .count();
         activeCustomersValue.setText(String.valueOf(activeCount));
 
-        // Pie chart: Sales by payment method
         Map<String, Double> paymentTotals = allSales.stream()
             .collect(Collectors.groupingBy(Sales::getPaymentMethod, Collectors.summingDouble(Sales::getTotalAmount)));
         salesPie.getData().clear();
@@ -111,7 +105,6 @@ public class DashboardController implements Initializable {
         salesPie.setLegendVisible(true);
         salesPie.setLabelsVisible(true);
 
-        // Line chart: Daily sales for last 7 days
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Sales (KSH)");
         SimpleDateFormat dayFmt = new SimpleDateFormat("EEE");
@@ -132,7 +125,6 @@ public class DashboardController implements Initializable {
         salesLine.getData().clear();
         salesLine.getData().add(series);
 
-        // Recent transactions (exclude WALKIN)
         List<String> recent = allSales.stream()
             .filter(s -> !s.getCustomerId().equalsIgnoreCase("WALKIN"))
             .sorted((a, b) -> b.getSaleDate().compareTo(a.getSaleDate()))
@@ -144,7 +136,6 @@ public class DashboardController implements Initializable {
             .collect(Collectors.toList());
         recentTransactionsList.getItems().setAll(recent);
 
-        // Low stock list
         List<String> low = lowStockProducts.stream()
             .map(p -> p.getProductName() + " (" + p.getCategory() + ") — " + p.getQuantity() + " / " + p.getReorderLevel())
             .collect(Collectors.toList());

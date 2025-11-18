@@ -21,7 +21,6 @@
         <Button fx:id="refreshButton" text="Refresh" styleClass="action-button"/>
     </HBox>
 
-    <!-- Search Section -->
     <HBox spacing="12" alignment="CENTER_LEFT">
         <Label text="Search:" styleClass="search-label"/>
         <TextField fx:id="searchField" promptText="Search by receipt ID, sale ID, customer, or payment method..."
@@ -30,7 +29,6 @@
         <Button fx:id="clearSearchButton" text="Clear" styleClass="clear-button"/>
     </HBox>
 
-    <!-- Receipts Table -->
     <VBox VBox.vgrow="ALWAYS" spacing="8">
         <Label text="All Issued Receipts" styleClass="section-title">
             <font>
@@ -52,7 +50,6 @@
         </TableView>
     </VBox>
 
-    <!-- Footer -->
     <HBox spacing="12" alignment="CENTER_RIGHT">
         <Label text="Total Receipts:" styleClass="footer-label"/>
         <Label fx:id="totalReceiptsLabel" text="0" styleClass="footer-value"/>

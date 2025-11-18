@@ -15,7 +15,6 @@
       fx:controller="com.system.billingsystem.controller.CustomersController"
       spacing="16" style="-fx-padding:16; -fx-background-color:#f4f6f8;">
 
-    <!-- Summary Cards -->
     <HBox spacing="16">
         <children>
             <VBox spacing="6" HBox.hgrow="ALWAYS" style="-fx-background-color:#ffffff; -fx-padding:12;">
@@ -41,7 +40,6 @@
         </children>
     </HBox>
 
-    <!-- Search, Filters, and Actions -->
     <HBox spacing="8">
         <TextField fx:id="searchField" promptText="Search by name, phone or email..." HBox.hgrow="ALWAYS"/>
         <DatePicker fx:id="fromDate" promptText="From"/>
@@ -52,7 +50,6 @@
 
     <Separator/>
 
-    <!-- Table -->
     <TableView fx:id="customersTable" VBox.vgrow="ALWAYS" style="-fx-background-color:white;">
         <columns>
             <TableColumn text="ID" fx:id="colId" prefWidth="80"/>
@@ -66,7 +63,6 @@
         </columns>
     </TableView>
 
-    <!-- Footer hint -->
     <HBox spacing="8" alignment="CENTER_LEFT">
         <Label text="Tip: Select a row to edit or delete a customer." style="-fx-text-fill:#666666; -fx-font-size:12px;"/>
     </HBox>

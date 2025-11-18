@@ -14,7 +14,6 @@
       fx:controller="com.system.billingsystem.controller.InventoryController"
       spacing="16" style="-fx-padding: 16;">
 
-    <!-- Summary Cards -->
     <HBox spacing="16">
         <children>
             <VBox spacing="6" HBox.hgrow="ALWAYS" style="-fx-background-color: #ffffff; -fx-padding: 12;">
@@ -39,14 +38,12 @@
         </children>
     </HBox>
 
-    <!-- Search + Add Button -->
     <HBox spacing="8">
         <TextField fx:id="searchField" promptText="Search products..." HBox.hgrow="ALWAYS"/>
         <Button text="Search" fx:id="searchButton"/>
         <Button text="Add Product" fx:id="addProductButton"/>
     </HBox>
 
-    <!-- Table -->
     <TableView fx:id="productTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn text="Product" fx:id="colName" prefWidth="150"/>

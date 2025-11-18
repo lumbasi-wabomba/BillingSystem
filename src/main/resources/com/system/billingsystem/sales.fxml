@@ -11,21 +11,18 @@
       fx:controller="com.system.billingsystem.controller.SalesController"
       spacing="16" style="-fx-padding: 16;">
     
-    <!-- Header -->
     <HBox spacing="12" alignment="CENTER_LEFT">
         <Label text="Sales History" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="refreshButton" text="Refresh" />
     </HBox>
     
-    <!-- Search Bar -->
     <HBox spacing="8" alignment="CENTER_LEFT">
         <TextField fx:id="searchField" promptText="Search by Sale ID, Customer, Cashier, Payment Method..." HBox.hgrow="ALWAYS"/>
         <Button fx:id="searchButton" text="Search" styleClass="primary-button"/>
         <Button fx:id="clearSearchButton" text="Clear"/>
     </HBox>
 
-    <!-- Sales Table -->
     <TableView fx:id="salesTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colId" text="Sale ID" prefWidth="120"/>

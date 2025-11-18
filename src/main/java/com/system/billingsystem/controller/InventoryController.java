@@ -97,7 +97,6 @@ public class InventoryController {
                     {
                         viewBtn.setOnAction(evt -> showProductDialog(getCurrentProduct(), false));
                         editBtn.setOnAction(evt -> showProductDialog(getCurrentProduct(), true));
-                        // delBtn.setOnAction(evt -> handleDeleteProduct(getCurrentProduct()));
                     }
 
                     private Products getCurrentProduct() {
